@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <!-- Royal Cyber Gold & Cyan Hologram Gradients -->
+    <linearGradient id="cyberGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f0ff" />
+      <stop offset="35%" stop-color="#ffd700" />
+      <stop offset="70%" stop-color="#ffb700" />
+      <stop offset="100%" stop-color="#0080ff" />
+    </linearGradient>
+
+    <linearGradient id="corePillarGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#050b14" />
+      <stop offset="50%" stop-color="#00f0ff" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+
+    <!-- Neon Glow Filter -->
+    <filter id="hologramGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    /* Continuous 3D Gyroscopic & Pulsing Motion */
+    @keyframes gyroSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes gyroCounterSpin {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+    @keyframes corePulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px #00f0ff); }
+      50% { transform: scale(1.08); filter: drop-shadow(0 0 22px #ffd700); }
+    }
+    @keyframes beamFlow {
+      0% { stroke-dashoffset: 120; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .gyro-ring-outer {
+      transform-origin: 100px 100px;
+      animation: gyroSpin 14s linear infinite;
+    }
+    .gyro-ring-inner {
+      transform-origin: 100px 100px;
+      animation: gyroCounterSpin 9s linear infinite;
+    }
+    .core-structure {
+      transform-origin: 100px 100px;
+      animation: corePulse 3.5s ease-in-out infinite;
+    }
+    .beam-circuit {
+      stroke-dasharray: 20 10;
+      animation: beamFlow 4s linear infinite;
+    }
+  </style>
+
+  <!-- Deep Obsidian Shield Background -->
+  <rect width="200" height="200" rx="44" fill="#050b14" stroke="url(#cyberGoldGrad)" stroke-width="3" />
+
+  <!-- Outer Holographic Radar Ring -->
+  <g class="gyro-ring-outer">
+    <circle cx="100" cy="100" r="82" fill="none" stroke="#00f0ff" stroke-width="1.5" stroke-opacity="0.35" stroke-dasharray="8 6 18 6" />
+    <circle cx="100" cy="18" r="4" fill="#00f0ff" filter="url(#hologramGlow)" />
+    <circle cx="100" cy="182" r="3" fill="#ffd700" filter="url(#hologramGlow)" />
+  </g>
+
+  <!-- Inner Dynamic Orbital Ring -->
+  <g class="gyro-ring-inner">
+    <circle cx="100" cy="100" r="66" fill="none" stroke="#ffd700" stroke-width="2" stroke-opacity="0.5" stroke-dasharray="14 10 30 10" />
+    <circle cx="34" cy="100" r="3.5" fill="#ffd700" filter="url(#hologramGlow)" />
+    <circle cx="166" cy="100" r="3.5" fill="#00f0ff" filter="url(#hologramGlow)" />
+  </g>
+
+  <!-- High-Tech Central "BUNYAD" (ب) Mega-Architecture Structure -->
+  <g class="core-structure">
+    <!-- Base Floating Monolith -->
+    <path d="M46 142 L154 142 L140 156 L60 156 Z" fill="url(#cyberGoldGrad)" filter="url(#hologramGlow)" opacity="0.9" />
+
+    <!-- Twin Cyber Architectural Towers (High-Rise Foundation) -->
+    <!-- Left Tower -->
+    <path d="M62 138 L62 76 L82 62 L82 138 Z" fill="#081426" stroke="#00f0ff" stroke-width="2.5" />
+    <!-- Tower Windows & Tech Beams -->
+    <line x1="68" y1="84" x2="76" y2="84" stroke="#00f0ff" stroke-width="2" opacity="0.8" />
+    <line x1="68" y1="98" x2="76" y2="98" stroke="#00f0ff" stroke-width="2" opacity="0.8" />
+    <line x1="68" y1="112" x2="76" y2="112" stroke="#00f0ff" stroke-width="2" opacity="0.8" />
+    <line x1="68" y1="126" x2="76" y2="126" stroke="#ffd700" stroke-width="2" />
+
+    <!-- Right Tower -->
+    <path d="M118 138 L118 62 L138 76 L138 138 Z" fill="#081426" stroke="#00f0ff" stroke-width="2.5" />
+    <line x1="124" y1="84" x2="132" y2="84" stroke="#00f0ff" stroke-width="2" opacity="0.8" />
+    <line x1="124" y1="98" x2="132" y2="98" stroke="#00f0ff" stroke-width="2" opacity="0.8" />
+    <line x1="124" y1="112" x2="132" y2="112" stroke="#00f0ff" stroke-width="2" opacity="0.8" />
+    <line x1="124" y1="126" x2="132" y2="126" stroke="#ffd700" stroke-width="2" />
+
+    <!-- Central Spire / Apex Crown (Reaching Skyward) -->
+    <path d="M92 138 L92 46 L100 32 L108 46 L108 138 Z" fill="url(#corePillarGrad)" stroke="#ffd700" stroke-width="2" filter="url(#hologramGlow)" />
+    <!-- Skyward Laser Beacon -->
+    <circle cx="100" cy="30" r="5" fill="#ffffff" filter="url(#hologramGlow)" />
+
+    <!-- The Symbolic Royal Dot of "ب" (Nuqta of Bunyad) Floating Below -->
+    <polygon points="100,166 112,176 100,186 88,176" fill="#ffd700" stroke="#00f0ff" stroke-width="2" filter="url(#hologramGlow)" />
+  </g>
+
+  <!-- Live Interconnecting Data Rays -->
+  <line x1="30" y1="100" x2="170" y2="100" stroke="#00f0ff" stroke-width="1" stroke-opacity="0.25" class="beam-circuit" />
+</svg>

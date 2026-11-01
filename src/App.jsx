@@ -35,10 +35,17 @@ export default function App() {
   const handleDone = useCallback(() => setIntroDone(true), [])
   const replay = useCallback(() => { setIntroDone(false); setReplayKey(k => k + 1) }, [])
 
+  // Smooth scroll with sticky header offset so buttons work 100%
   const scrollTo = useCallback((id) => {
     const el = document.getElementById(id)
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const headerOffset = 90
+      const elementPosition = el.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
     }
   }, [])
 
@@ -47,24 +54,26 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen bg-obsidian text-platinum selection:bg-cyber selection:text-obsidian font-sans">
-      <KineticBackground />
+      
+      {/* Background with strictly disabled pointer events so clicks pass through to buttons */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <KineticBackground />
+      </div>
 
       {!introDone && <CinematicIntro onDone={handleDone} replayKey={replayKey} />}
 
-      <Ticker />
+      <div className="relative z-40">
+        <Ticker />
+      </div>
 
       {/* Header with compact logo and clean layout */}
       <header className="sticky top-0 z-50 glass-strong border-b border-cyber/20 backdrop-blur-md">
         <div className="px-4 md:px-8 py-2.5 flex items-center justify-between gap-3">
           
           <div className="flex items-center gap-3 min-w-0">
+            {/* Clean compact logo without black box bug */}
             <div className="w-10 h-10 rounded-xl bg-obsidian2 border border-cyber/50 shadow-[0_0_12px_rgba(0,240,255,0.3)] flex items-center justify-center p-1.5 shrink-0 overflow-hidden">
-              <img 
-                src="./bunyad-favicon.svg" 
-                alt="BUNYAD" 
-                className="w-full h-full object-contain"
-                onError={(e) => { e.target.src = '/bunyad.pk/bunyad-favicon.svg' }}
-              />
+              <span className="font-display font-black text-cyber text-lg tracking-wider">B</span>
             </div>
 
             <div className="min-w-0">
@@ -137,28 +146,29 @@ export default function App() {
         </div>
       </header>
 
+      {/* Main Content Area with enabled clicks and correct Z-indexing */}
       <main className="relative z-10 space-y-12 pb-16">
-        <div id="home">
+        <div id="home" className="pt-2">
           <HeroLead onOpenAddProperty={() => setAddPropOpen(true)} />
         </div>
 
-        <div id="directory">
+        <div id="directory" className="pt-2">
           <SocietyDirectory />
         </div>
 
-        <div id="services">
+        <div id="services" className="pt-2">
           <ServicesSuite onInquire={() => scrollTo('home')} />
         </div>
 
-        <div id="suite">
+        <div id="suite" className="pt-2">
           <UtilitySuite />
         </div>
 
-        <div id="lda-docs">
+        <div id="lda-docs" className="pt-2">
           <LDADocuments />
         </div>
 
-        <div id="master-maps">
+        <div id="master-maps" className="pt-2">
           <MasterMaps />
         </div>
 
@@ -212,7 +222,7 @@ export default function App() {
               BUNYAD Digital QR Pass
             </h3>
             <p className="text-xs text-platinum/70 mb-5">
-              Mobile varun scan karun portal aani LDA database open kara.
+              موبائل سے اسکین کر کے پورٹل اور ایل ڈی اے ڈیٹا بیس تک رسائی حاصل کریں۔
             </p>
             <div className="bg-obsidian2 p-4 rounded-2xl border border-cyber/30 inline-block mb-4 shadow-inner">
               <img src={qrCodeImageUrl} alt="BUNYAD QR Code" className="w-56 h-56 mx-auto rounded-lg" />
@@ -221,7 +231,7 @@ export default function App() {
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(portalLiveUrl)
-                  alert('Portal link copy jhali!')
+                  alert('پورٹل کا لنک کاپی ہو گیا!')
                 }}
                 className="btn-cyber w-full py-2.5 text-xs font-bold cursor-pointer"
               >

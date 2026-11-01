@@ -14,7 +14,7 @@ import AdminPanel from './components/AdminPanel.jsx'
 import AuthHub from './components/AuthHub.jsx'
 import AudioController from './components/AudioController.jsx'
 import AIConsultant from './components/AIConsultant.jsx'
-import { CEO_NAME, CEO_URDU, CEO_PHONE, HQ, waLink } from './data/societies.js'
+import { CEO_NAME, CEO_URDU, CEO_PHONE, HQ } from './data/societies.js'
 
 const NAV = [
   { id: 'home', label: 'Command', icon: Zap },
@@ -53,22 +53,18 @@ export default function App() {
 
       <Ticker />
 
-      {/* Main Clean HUD Header - No Double Boxes */}
+      {/* Header with compact logo and clean layout */}
       <header className="sticky top-0 z-50 glass-strong border-b border-cyber/20 backdrop-blur-md">
         <div className="px-4 md:px-8 py-2.5 flex items-center justify-between gap-3">
           
-          {/* Single Clean Animated Hologram Logo & Brand */}
           <div className="flex items-center gap-3 min-w-0">
-            <div className="relative w-11 h-11 rounded-xl bg-obsidian2 border border-cyber shadow-[0_0_15px_rgba(0,240,255,0.4)] flex items-center justify-center p-0.5 shrink-0 overflow-hidden">
-              <video
-                src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-traffic-at-night-41548-large.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover scale-110"
+            <div className="w-10 h-10 rounded-xl bg-obsidian2 border border-cyber/50 shadow-[0_0_12px_rgba(0,240,255,0.3)] flex items-center justify-center p-1.5 shrink-0 overflow-hidden">
+              <img 
+                src="./bunyad-favicon.svg" 
+                alt="BUNYAD" 
+                className="w-full h-full object-contain"
+                onError={(e) => { e.target.src = '/bunyad.pk/bunyad-favicon.svg' }}
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-obsidian/30 to-cyber/20 pointer-events-none" />
             </div>
 
             <div className="min-w-0">
@@ -81,7 +77,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* Navigation Links */}
           <nav className="hidden lg:flex items-center gap-1">
             {NAV.map(n => {
               const Icon = n.icon
@@ -97,7 +92,6 @@ export default function App() {
             })}
           </nav>
 
-          {/* Action Buttons */}
           <div className="flex items-center gap-2">
             <AudioController />
 
@@ -127,7 +121,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Mobile Quick Bar */}
         <div className="lg:hidden flex items-center gap-1 px-3 pb-2 overflow-x-auto border-t border-cyber/10 pt-1.5">
           {NAV.map(n => {
             const Icon = n.icon
@@ -144,7 +137,6 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Suite with Correct Scrolling IDs */}
       <main className="relative z-10 space-y-12 pb-16">
         <div id="home">
           <HeroLead onOpenAddProperty={() => setAddPropOpen(true)} />
@@ -170,7 +162,6 @@ export default function App() {
           <MasterMaps />
         </div>
 
-        {/* CEO Desk */}
         <div id="admin" className="px-4 md:px-8 py-12">
           <div className="glass-strong rounded-2xl cyber-border p-6 text-center max-w-3xl mx-auto">
             <Shield className="mx-auto text-cyber" size={32} />
@@ -186,7 +177,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Global Footer */}
         <footer className="border-t border-cyber/15 px-4 md:px-8 py-8 text-center glass-strong">
           <p className="font-display font-black text-platinum text-base">
             BUNYAD <span className="font-urdu text-cyber text-xl">بنیاد</span>
@@ -206,7 +196,6 @@ export default function App() {
       <AddPropertyModal open={addPropOpen} onClose={() => setAddPropOpen(false)} />
       <AIConsultant />
 
-      {/* QR Modal */}
       {qrOpen && (
         <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-obsidian/85 backdrop-blur-md">
           <div className="glass-strong rounded-3xl cyber-border p-6 sm:p-8 max-w-sm w-full text-center relative">
@@ -223,7 +212,7 @@ export default function App() {
               BUNYAD Digital QR Pass
             </h3>
             <p className="text-xs text-platinum/70 mb-5">
-              Mobile se scan karke LDA database aur portal open karein.
+              Mobile varun scan karun portal aani LDA database open kara.
             </p>
             <div className="bg-obsidian2 p-4 rounded-2xl border border-cyber/30 inline-block mb-4 shadow-inner">
               <img src={qrCodeImageUrl} alt="BUNYAD QR Code" className="w-56 h-56 mx-auto rounded-lg" />
@@ -232,7 +221,7 @@ export default function App() {
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(portalLiveUrl)
-                  alert('✅ Portal link copy ho gaya!')
+                  alert('Portal link copy jhali!')
                 }}
                 className="btn-cyber w-full py-2.5 text-xs font-bold cursor-pointer"
               >

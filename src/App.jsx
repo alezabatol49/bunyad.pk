@@ -14,6 +14,7 @@ import AdminPanel from './components/AdminPanel.jsx'
 import AuthHub from './components/AuthHub.jsx'
 import AudioController from './components/AudioController.jsx'
 import AIConsultant from './components/AIConsultant.jsx'
+import AnimatedLogo from './components/AnimatedLogo.jsx'
 import { CEO_NAME, CEO_URDU, CEO_PHONE, HQ, waLink } from './data/societies.js'
 
 const NAV = [
@@ -49,30 +50,30 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen bg-obsidian text-platinum selection:bg-cyber selection:text-obsidian font-sans">
-      {/* Background Ambience */}
       <KineticBackground />
 
-      {/* 3D Cinematic Construction Intro */}
       {!introDone && <CinematicIntro onDone={handleDone} replayKey={replayKey} />}
 
-      {/* Live Market Rates Marquee */}
       <Ticker />
 
-      {/* Main Glass HUD Header */}
+      {/* Main Glass Header */}
       <header className="sticky top-0 z-50 glass-strong border-b border-cyber/20 backdrop-blur-md">
         <div className="px-4 md:px-8 py-2.5 flex items-center justify-between gap-3">
           
-          {/* Single Clean Branding (No Double Logo) */}
+          {/* Logo & Side Menu Trigger */}
           <div className="flex items-center gap-3 min-w-0">
             <button
               onClick={() => setSidebarOpen(true)}
               className="w-9 h-9 rounded-xl bg-obsidian2 border border-cyber/50 hover:border-cyber text-cyber flex flex-col items-center justify-center gap-1 shadow-md shadow-cyber/20 hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer"
-              title="Open Master Slide Menu"
+              title="Open Navigation Desk"
             >
               <span className="w-4 h-0.5 bg-cyber" />
               <span className="w-3 h-0.5 bg-cyber" />
               <span className="w-4 h-0.5 bg-cyber" />
             </button>
+
+            {/* Single 3D Moving Animated Logo */}
+            <AnimatedLogo size="md" />
 
             <div className="min-w-0">
               <p className="font-display font-black text-platinum text-base leading-tight tracking-wide flex items-center gap-2">
@@ -84,7 +85,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Navigation Links */}
           <nav className="hidden lg:flex items-center gap-1">
             {NAV.map(n => {
               const Icon = n.icon
@@ -107,7 +108,6 @@ export default function App() {
             <button
               onClick={() => setAddPropOpen(true)}
               className="btn-cyber text-xs px-3 py-1.5 flex items-center gap-1.5 font-bold shadow-md shadow-cyber/20 cursor-pointer"
-              title="Submit Property Listing"
             >
               <Plus size={13} /> <span className="hidden sm:inline">Add Property</span>
             </button>
@@ -115,7 +115,6 @@ export default function App() {
             <button
               onClick={() => setQrOpen(true)}
               className="btn-ghost text-xs px-2.5 py-1.5 hidden sm:flex items-center gap-1 text-cyber cursor-pointer"
-              title="Share QR Pass"
             >
               <span>📲 QR</span>
             </button>
@@ -123,7 +122,6 @@ export default function App() {
             <button
               onClick={replay}
               className="btn-ghost text-xs px-2.5 py-1.5 hidden md:flex items-center gap-1 cursor-pointer"
-              title="Replay 3D Intro"
             >
               <Zap size={13} /> <span className="hidden sm:inline">Replay</span>
             </button>
@@ -133,7 +131,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Mobile Horizontal Bar */}
+        {/* Mobile Submenu Bar */}
         <div className="lg:hidden flex items-center gap-1 px-3 pb-2 overflow-x-auto border-t border-cyber/10 pt-1.5">
           {NAV.map(n => {
             const Icon = n.icon
@@ -150,7 +148,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Slide-out Master Side Menu Drawer */}
+      {/* Slide Menu Drawer */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-[150] flex">
           <div
@@ -160,9 +158,12 @@ export default function App() {
           <div className="relative w-80 sm:w-96 max-w-[85vw] h-full bg-obsidian2 border-r border-cyber/30 shadow-2xl p-6 z-10 flex flex-col justify-between overflow-y-auto">
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-cyber/20 mb-5">
-                <div>
-                  <h3 className="font-display font-black text-platinum text-base">BUNYAD Portal</h3>
-                  <p className="text-[10px] text-cyber font-mono font-bold">Master Navigation Desk</p>
+                <div className="flex items-center gap-3">
+                  <AnimatedLogo size="sm" />
+                  <div>
+                    <h3 className="font-display font-black text-platinum text-base">BUNYAD Portal</h3>
+                    <p className="text-[10px] text-cyber font-mono font-bold">Master Navigation Desk</p>
+                  </div>
                 </div>
                 <button
                   onClick={() => setSidebarOpen(false)}
@@ -208,7 +209,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Main Suite with Matched Component IDs */}
+      {/* Main Sections */}
       <main className="relative z-10 space-y-12 pb-16">
         <div id="home">
           <HeroLead onOpenAddProperty={() => setAddPropOpen(true)} />
@@ -234,7 +235,7 @@ export default function App() {
           <MasterMaps />
         </div>
 
-        {/* CEO Admin Anchor */}
+        {/* CEO Desk */}
         <div id="admin" className="px-4 md:px-8 py-12">
           <div className="glass-strong rounded-2xl cyber-border p-6 text-center max-w-3xl mx-auto">
             <Shield className="mx-auto text-cyber" size={32} />
@@ -252,6 +253,9 @@ export default function App() {
 
         {/* Global Footer */}
         <footer className="border-t border-cyber/15 px-4 md:px-8 py-8 text-center glass-strong">
+          <div className="flex items-center justify-center mb-3">
+            <AnimatedLogo size="sm" />
+          </div>
           <p className="font-display font-black text-platinum text-base">
             BUNYAD <span className="font-urdu text-cyber text-xl">بنیاد</span>
           </p>
@@ -267,13 +271,9 @@ export default function App() {
         </footer>
       </main>
 
-      {/* Property Modal */}
       <AddPropertyModal open={addPropOpen} onClose={() => setAddPropOpen(false)} />
-
-      {/* Gemini AI LDA 2026 Consultant */}
       <AIConsultant />
 
-      {/* Digital QR Pass Modal */}
       {qrOpen && (
         <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-obsidian/85 backdrop-blur-md">
           <div className="glass-strong rounded-3xl cyber-border p-6 sm:p-8 max-w-sm w-full text-center relative">

@@ -1,155 +1,172 @@
-import React, { useState } from 'react';
-import Ticker from './components/Ticker.jsx';
-import HeroLead from './components/HeroLead.jsx';
-import SocietyDirectory from './components/SocietyDirectory.jsx';
-import UtilitySuite from './components/UtilitySuite.jsx';
-import LDADocuments from './components/LDADocuments.jsx';
-import MasterMaps from './components/MasterMaps.jsx';
-import ServicesSuite from './components/ServicesSuite.jsx';
-import AddPropertyModal from './components/AddPropertyModal.jsx';
-import AdminPanel from './components/AdminPanel.jsx';
-import AuthHub from './components/AuthHub.jsx';
-import AudioController from './components/AudioController.jsx';
-import KineticBackground from './components/KineticBackground.jsx';
-import CinematicIntro from './components/CinematicIntro.jsx';
-import { CEO_PHONE, waLink } from './data/societies.js';
+import React, { useState, useCallback } from 'react'
+import { Zap, Building2, Wrench, Shield, Home, Plus, Gavel, MapIcon } from './icons.jsx'
+import KineticBackground from './components/KineticBackground.jsx'
+import CinematicIntro from './components/CinematicIntro.jsx'
+import Ticker from './components/Ticker.jsx'
+import HeroLead from './components/HeroLead.jsx'
+import SocietyDirectory from './components/SocietyDirectory.jsx'
+import ServicesSuite from './components/ServicesSuite.jsx'
+import UtilitySuite from './components/UtilitySuite.jsx'
+import LDADocuments from './components/LDADocuments.jsx'
+import MasterMaps from './components/MasterMaps.jsx'
+import AddPropertyModal from './components/AddPropertyModal.jsx'
+import AdminPanel from './components/AdminPanel.jsx'
+import AuthHub from './components/AuthHub.jsx'
+import AudioController from './components/AudioController.jsx'
+import AIConsultant from './components/AIConsultant.jsx'
+import { CEO_NAME, CEO_URDU, CEO_PHONE, HQ, waLink } from './data/societies.js'
+
+const NAV = [
+  { id: 'hero-lead', label: 'Command', icon: Zap },
+  { id: 'societies-directory', label: '38 Societies', icon: Building2 },
+  { id: 'services-suite', label: 'Services', icon: Wrench },
+  { id: 'utility-suite', label: 'PropTech Valuation', icon: Wrench },
+  { id: 'lda-documents', label: 'LDA Docs Hub', icon: Gavel },
+  { id: 'master-maps', label: 'Avenue 1 Maps', icon: MapIcon },
+  { id: 'admin', label: 'CEO Desk', icon: Shield }
+]
 
 export default function App() {
-  const [introOpen, setIntroOpen] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [addPropertyOpen, setAddPropertyOpen] = useState(false);
-  const [qrOpen, setQrOpen] = useState(false);
+  const [introDone, setIntroDone] = useState(false)
+  const [replayKey, setReplayKey] = useState(0)
+  const [addPropOpen, setAddPropOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [qrOpen, setQrOpen] = useState(false)
 
-  const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-    setSidebarOpen(false);
-  };
+  const handleDone = useCallback(() => setIntroDone(true), [])
+  const replay = useCallback(() => { setIntroDone(false); setReplayKey(k => k + 1) }, [])
 
-  const portalLiveUrl = "https://bintahaassociates.github.io/bunyad/";
-  const qrCodeImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(portalLiveUrl)}&bgcolor=060b13&color=00f0ff&margin=2`;
+  const scrollTo = useCallback((id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    setSidebarOpen(false)
+  }, [])
 
-  const MENU_ITEMS = [
-    { id: 'hero-lead', label: 'Command Deck (مرکزی کنٹرول روم)', icon: '⚡', desc: 'Overview, Rates & Booking Desk' },
-    { id: 'master-maps', label: 'LDA Avenue 1 Maps (سیکٹر نقشہ جات)', icon: '🗺️', desc: 'Interactive Block-wise Master Plan' },
-    { id: 'lda-documents', label: 'LDA Forms Hub (سرکاری دستاویزات)', icon: '📑', desc: '18 Official Verification & Transfer Forms' },
-    { id: 'services-suite', label: 'PropTech Services (تعمیرات و قانونی خدمات)', icon: '🏗️', desc: 'PEC Category-C Builds & Valuation' },
-    { id: 'societies-directory', label: 'Lahore Societies (سوسائٹیز ڈائریکٹری)', icon: '🏙️', desc: '38+ Verified Societies with 2026 DC Rates' },
-    { id: 'utility-suite', label: 'Valuation & Escrow (محفوظ ایسکرو و ٹیکس)', icon: '📊', desc: 'FBR Tax Calculator & Construction Estimator' }
-  ];
+  const portalLiveUrl = "https://alezabatol49.github.io/bunyad.pk/"
+  const qrCodeImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(portalLiveUrl)}&bgcolor=060b13&color=00f0ff&margin=2`
 
   return (
-    <div className="min-h-screen bg-obsidian text-platinum font-sans relative selection:bg-cyber selection:text-obsidian">
-      {/* 1. Cinematic 3D Architectural Genesis Intro Screen */}
-      {introOpen && (
-        <CinematicIntro onDone={() => setIntroOpen(false)} />
-      )}
-
-      {/* Background Ambience */}
+    <div className="relative min-h-screen bg-obsidian text-platinum selection:bg-cyber selection:text-obsidian">
+      {/* Dynamic Animated Ambience */}
       <KineticBackground />
 
-      {/* Top Live Rates Marquee */}
+      {/* 3D Cinematic Construction Genesis Intro */}
+      {!introDone && <CinematicIntro onDone={handleDone} replayKey={replayKey} />}
+
+      {/* Live Market Marquee Rates */}
       <Ticker />
 
-      {/* Main HUD Top Header */}
-      <header className="sticky top-0 z-50 glass-strong border-b border-cyber/20 px-4 sm:px-8 py-3 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
-          {/* Logo & Brand + Mobile/Desktop Hamburger Button */}
-          <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
-            <div className="flex items-center gap-3">
-              {/* Premium Side Menu Bar Trigger */}
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="w-10 h-10 rounded-xl bg-obsidian2 border border-cyber/50 hover:border-cyber text-cyber flex flex-col items-center justify-center gap-1.5 shadow-lg shadow-cyber/20 transition-all hover:scale-105 active:scale-95 group"
-                title="Open Master Navigation Desk (مکمل سائیڈ مینو بار)"
-              >
-                <span className="w-5 h-0.5 bg-cyber group-hover:w-6 transition-all" />
-                <span className="w-4 h-0.5 bg-cyber group-hover:w-6 transition-all" />
-                <span className="w-5 h-0.5 bg-cyber group-hover:w-6 transition-all" />
-              </button>
-
-              <div className="w-10 h-10 rounded-xl bg-obsidian2 border border-cyber/40 flex items-center justify-center p-1 shadow-lg shadow-cyber/20 shrink-0">
-                <img src="/bunyad-favicon.svg" alt="BUNYAD" className="w-full h-full object-contain" />
-              </div>
-
-              <div>
-                <h1 className="font-display font-extrabold text-lg sm:text-xl tracking-tight text-platinum flex items-center gap-2">
-                  BUNYAD <span className="text-cyber text-base font-arabic">بنیاد</span>
-                </h1>
-                <p className="text-[10px] text-platinum/60 font-mono">
-                  Powered by Bin Taha Associates & Builders • CEO Taha Mubeen Bhutta
-                </p>
-              </div>
-            </div>
-
-            {/* Quick Menu Button for Small Devices */}
+      {/* Main Glass HUD Top Navigation */}
+      <header className="sticky top-0 z-50 glass-strong border-b border-cyber/20 backdrop-blur-md">
+        <div className="px-4 md:px-8 py-2.5 flex items-center justify-between gap-3">
+          
+          <div className="flex items-center gap-3 min-w-0">
+            {/* Hamburger Button for Master Slide Menu */}
             <button
               onClick={() => setSidebarOpen(true)}
-              className="md:hidden btn-cyber px-2.5 py-1 text-xs font-bold"
+              className="w-9 h-9 rounded-xl bg-obsidian2 border border-cyber/50 hover:border-cyber text-cyber flex flex-col items-center justify-center gap-1 shadow-lg shadow-cyber/20 transition-all hover:scale-105 active:scale-95 shrink-0"
+              title="Open Master Navigation Desk"
             >
-              Menu
+              <span className="w-4 h-0.5 bg-cyber" />
+              <span className="w-3.5 h-0.5 bg-cyber" />
+              <span className="w-4 h-0.5 bg-cyber" />
             </button>
+
+            <div className="w-9 h-9 rounded-xl cyber-border bg-obsidian2 flex items-center justify-center cyber-glow shrink-0 p-1">
+              <img src="/bunyad.pk/bunyad-favicon.svg" alt="BUNYAD" className="w-full h-full object-contain" onError={(e) => { e.target.src = '/bunyad-favicon.svg' }} />
+            </div>
+
+            <div className="min-w-0">
+              <p className="font-display font-black text-platinum text-sm leading-tight tracking-wide flex items-center gap-2">
+                BUNYAD <span className="font-urdu text-cyber text-base">بنیاد</span>
+              </p>
+              <p className="text-[9px] uppercase tracking-[0.2em] text-cyber/70 truncate font-mono">
+                Bin Taha Associates & Builders • CEO Taha Mubeen Bhutta
+              </p>
+            </div>
           </div>
 
-          {/* Navigation Links & Action Hub */}
-          <nav className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-center text-xs font-semibold">
-            <button onClick={() => scrollTo('hero-lead')} className="btn-ghost px-2.5 py-1.5">
-              Command
-            </button>
-            <button onClick={() => scrollTo('societies-directory')} className="btn-ghost px-2.5 py-1.5">
-              Societies
-            </button>
-            <button onClick={() => scrollTo('master-maps')} className="btn-ghost px-2.5 py-1.5">
-              Maps
-            </button>
-            <button onClick={() => scrollTo('lda-documents')} className="btn-ghost px-2.5 py-1.5">
-              LDA Forms
-            </button>
-            <button onClick={() => scrollTo('services-suite')} className="btn-ghost px-2.5 py-1.5">
-              Services
-            </button>
-            <button onClick={() => scrollTo('utility-suite')} className="btn-ghost px-2.5 py-1.5">
-              Valuation
-            </button>
+          {/* Desktop Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {NAV.map(n => {
+              const Icon = n.icon
+              return (
+                <button
+                  key={n.id}
+                  onClick={() => scrollTo(n.id)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-platinum/70 hover:text-cyber hover:bg-cyber/10 transition-all"
+                >
+                  <Icon size={13} /> {n.label}
+                </button>
+              )
+            })}
+          </nav>
+
+          {/* Action Hub */}
+          <div className="flex items-center gap-2">
+            <AudioController />
+            
             <button
-              onClick={() => setAddPropertyOpen(true)}
-              className="btn-cyber px-3 py-1.5 font-bold shadow-md shadow-cyber/20"
+              onClick={() => setAddPropOpen(true)}
+              className="btn-cyber text-xs px-3 py-1.5 flex items-center gap-1.5 font-bold shadow-md shadow-cyber/20"
+              title="Submit Property Listing"
             >
-              + Add Property
+              <Plus size={13} /> <span className="hidden sm:inline">Add Property</span>
             </button>
-            {/* Digital QR Pass Button */}
+
             <button
               onClick={() => setQrOpen(true)}
-              className="btn-ghost px-2.5 py-1.5 flex items-center gap-1 text-cyber hover:bg-cyber/15"
+              className="btn-ghost text-xs px-2.5 py-1.5 hidden sm:flex items-center gap-1 text-cyber"
               title="Share / Mobile Scan QR Pass"
             >
-              <span>📲 QR Pass</span>
+              <span>📲 QR</span>
             </button>
-            {/* Live Client Auth Portal */}
+
+            <button
+              onClick={replay}
+              className="btn-ghost text-xs px-2.5 py-1.5 hidden md:flex items-center gap-1"
+              title="Replay 3D Intro"
+            >
+              <Zap size={13} /> <span className="hidden sm:inline">Replay</span>
+            </button>
+
+            {/* Auth Portal (Sign In & Sign Up) */}
             <AuthHub />
-            {/* CEO Secure Management Desk */}
+
+            {/* CEO Admin PIN Console */}
             <AdminPanel />
-          </nav>
+          </div>
+        </div>
+
+        {/* Mobile Horizontal Quick Navigation */}
+        <div className="lg:hidden flex items-center gap-1 px-3 pb-2 overflow-x-auto border-t border-cyber/10 pt-1.5">
+          {NAV.map(n => {
+            const Icon = n.icon
+            return (
+              <button
+                key={n.id}
+                onClick={() => scrollTo(n.id)}
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold text-platinum/70 hover:text-cyber hover:bg-cyber/10 transition-all whitespace-nowrap"
+              >
+                <Icon size={12} /> {n.label}
+              </button>
+            )
+          })}
         </div>
       </header>
 
-      {/* 2. Slide-out Master Side Menu Drawer (بڑی ویب سائٹس کی طرح مکمل سائیڈ مینو بار) */}
+      {/* Slide-out Master Side Menu Drawer */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-[140] flex">
-          {/* Backdrop Blur Layer */}
-          <div 
+          <div
             onClick={() => setSidebarOpen(false)}
             className="fixed inset-0 bg-obsidian/80 backdrop-blur-sm transition-opacity"
           />
-
-          {/* Left Side Drawer Menu */}
-          <div className="relative w-80 sm:w-96 max-w-[85vw] h-full bg-obsidian2 border-r border-cyber/30 shadow-2xl shadow-cyber/20 flex flex-col justify-between p-6 z-10 overflow-y-auto">
+          <div className="relative w-80 sm:w-96 max-w-[85vw] h-full bg-obsidian2 border-r border-cyber/30 shadow-2xl p-6 z-10 flex flex-col justify-between overflow-y-auto">
             <div>
-              {/* Drawer Header */}
-              <div className="flex items-center justify-between pb-5 border-b border-cyber/20 mb-6">
+              <div className="flex items-center justify-between pb-4 border-b border-cyber/20 mb-5">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-obsidian border border-cyber flex items-center justify-center p-1 shadow-md shadow-cyber/30">
-                    <img src="/bunyad-favicon.svg" alt="BUNYAD" className="w-full h-full object-contain" />
+                  <div className="w-10 h-10 rounded-xl bg-obsidian border border-cyber flex items-center justify-center p-1 text-cyber font-bold shadow-md shadow-cyber/30">
+                    B
                   </div>
                   <div>
                     <h3 className="font-display font-black text-platinum text-base">BUNYAD Portal</h3>
@@ -164,62 +181,29 @@ export default function App() {
                 </button>
               </div>
 
-              {/* Master Click Navigation Items */}
               <div className="space-y-2 mb-6">
                 <p className="text-[10px] uppercase font-mono tracking-widest text-cyber/80 font-bold px-1 mb-2">
                   Portal Modules (ایک کلک پر تمام شعبہ جات):
                 </p>
-                {MENU_ITEMS.map((item) => (
+                {NAV.map(item => (
                   <button
                     key={item.id}
                     onClick={() => scrollTo(item.id)}
-                    className="w-full p-3 rounded-xl glass border border-cyber/15 hover:border-cyber/60 hover:bg-cyber/10 text-left transition-all flex items-center gap-3.5 group"
+                    className="w-full p-3 rounded-xl glass border border-cyber/15 hover:border-cyber/60 hover:bg-cyber/10 text-left transition-all flex items-center gap-3 group"
                   >
-                    <span className="text-xl p-2 rounded-lg bg-obsidian border border-cyber/20 group-hover:scale-110 transition-transform">
-                      {item.icon}
-                    </span>
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-bold text-platinum group-hover:text-cyber transition-colors">
                         {item.label}
-                      </p>
-                      <p className="text-[10px] text-platinum/50 truncate mt-0.5">
-                        {item.desc}
                       </p>
                     </div>
                   </button>
                 ))}
               </div>
-
-              {/* Instant Actions Grid */}
-              <div className="space-y-2 pt-2 border-t border-cyber/15">
-                <p className="text-[10px] uppercase font-mono tracking-widest text-cyber/80 font-bold px-1 mb-1">
-                  Instant Operations:
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => { setSidebarOpen(false); setAddPropertyOpen(true); }}
-                    className="btn-cyber py-2.5 text-xs text-center font-bold"
-                  >
-                    + Add Property
-                  </button>
-                  <button
-                    onClick={() => { setSidebarOpen(false); setQrOpen(true); }}
-                    className="btn-ghost py-2.5 text-xs text-center font-bold"
-                  >
-                    📲 QR Pass
-                  </button>
-                </div>
-              </div>
             </div>
 
-            {/* Side Menu Footer Info */}
             <div className="pt-6 border-t border-cyber/20 text-center space-y-2">
-              <p className="text-xs font-bold text-platinum">
-                CEO Taha Mubeen Bhutta
-              </p>
-              <p className="text-[11px] text-cyber font-mono font-bold">
-                Direct: 0321-9404812
-              </p>
+              <p className="text-xs font-bold text-platinum">CEO {CEO_NAME} ({CEO_URDU})</p>
+              <p className="text-[11px] text-cyber font-mono font-bold">Direct: {CEO_PHONE}</p>
               <a
                 href={waLink(CEO_PHONE, 'Assalam-o-Alaikum CEO Taha Mubeen Bhutta, connecting from BUNYAD Master Side Menu.')}
                 target="_blank"
@@ -233,72 +217,106 @@ export default function App() {
         </div>
       )}
 
-      {/* Main Content Suite */}
-      <main className="space-y-12 pb-16">
-        <HeroLead onOpenAddProperty={() => setAddPropertyOpen(true)} />
-        <ServicesSuite />
-        <MasterMaps />
-        <LDADocuments />
-        <SocietyDirectory />
-        <UtilitySuite />
+      {/* Main Body Suite */}
+      <main className="relative z-10 space-y-12 pb-16">
+        <section id="hero-lead">
+          <HeroLead onOpenAddProperty={() => setAddPropOpen(true)} />
+        </section>
+
+        <section id="societies-directory">
+          <SocietyDirectory />
+        </section>
+
+        <section id="services-suite">
+          <ServicesSuite onInquire={(title) => scrollTo('hero-lead')} />
+        </section>
+
+        <section id="utility-suite">
+          <UtilitySuite />
+        </section>
+
+        <section id="lda-documents">
+          <LDADocuments />
+        </section>
+
+        <section id="master-maps">
+          <MasterMaps />
+        </section>
+
+        {/* CEO Executive Desk Landing Anchor */}
+        <section id="admin" className="px-4 md:px-8 py-12">
+          <div className="glass-strong rounded-2xl cyber-border p-6 text-center max-w-3xl mx-auto">
+            <Shield className="mx-auto text-cyber" size={32} />
+            <h2 className="font-display text-xl md:text-2xl font-bold text-platinum mt-3">
+              Executive Admin & CRM Console
+            </h2>
+            <p className="text-platinum/60 text-sm mt-2 max-w-xl mx-auto">
+              Secure PIN-gated dashboard for CEO {CEO_NAME} ({CEO_URDU}) — lead manager, CRM pipeline, inventory, material rates & authorized dealer portal.
+            </p>
+            <p className="text-[11px] text-cyber/70 mt-3 font-mono">
+              Headquarters: {HQ} · Direct: {CEO_PHONE}
+            </p>
+          </div>
+        </section>
+
+        {/* Global Footer */}
+        <footer className="border-t border-cyber/15 px-4 md:px-8 py-8 text-center glass-strong">
+          <p className="font-display font-black text-platinum text-base">
+            BUNYAD <span className="font-urdu text-cyber text-xl">بنیاد</span>
+          </p>
+          <p className="text-[11px] text-platinum/50 mt-1">
+            Powered by Bin Taha Associates & Builders · بن طہٰ ایسوسی ایٹس
+          </p>
+          <p className="text-[11px] text-platinum/50 mt-1">
+            CEO {CEO_NAME} ({CEO_URDU}) · {CEO_PHONE} · {HQ}
+          </p>
+          <p className="text-[10px] text-platinum/30 mt-3 font-mono">
+            © 2026 Bunyad.pk · PropTech HUD Command Center
+          </p>
+        </footer>
       </main>
 
-      {/* Floating Audio Ambient Controller */}
-      <AudioController />
+      {/* Global Property Modal */}
+      <AddPropertyModal open={addPropOpen} onClose={() => setAddPropOpen(false)} />
 
-      {/* Global Add Property Modal */}
-      <AddPropertyModal
-        open={addPropertyOpen}
-        onClose={() => setAddPropertyOpen(false)}
-      />
+      {/* Gemini AI LDA 2026 Consultant Assistant */}
+      <AIConsultant />
 
-      {/* QR Code Share Pass Modal */}
+      {/* QR Code Pass Modal */}
       {qrOpen && (
         <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-obsidian/85 backdrop-blur-md">
-          <div className="glass-strong rounded-3xl cyber-border p-6 sm:p-8 max-w-sm w-full text-center relative animate-scale-in">
+          <div className="glass-strong rounded-3xl cyber-border p-6 sm:p-8 max-w-sm w-full text-center relative">
             <button
               onClick={() => setQrOpen(false)}
               className="absolute top-4 right-4 text-platinum/60 hover:text-cyber text-sm font-mono"
             >
               [ESC]
             </button>
-
             <div className="w-12 h-12 rounded-2xl bg-cyber/10 border border-cyber mx-auto flex items-center justify-center text-cyber text-xl mb-3 shadow-lg shadow-cyber/30">
               ⚡
             </div>
-
             <h3 className="text-lg font-black text-platinum font-display mb-1">
               BUNYAD Digital QR Pass
             </h3>
             <p className="text-xs text-platinum/70 mb-5">
               اسمارٹ فون سے اسکین کر کے براہِ راست پورٹل اور ایل ڈی اے ڈیٹا بیس تک رسائی حاصل کریں۔
             </p>
-
             <div className="bg-obsidian2 p-4 rounded-2xl border border-cyber/30 inline-block mb-4 shadow-inner">
-              <img
-                src={qrCodeImageUrl}
-                alt="BUNYAD QR Code"
-                className="w-56 h-56 mx-auto rounded-lg"
-              />
+              <img src={qrCodeImageUrl} alt="BUNYAD QR Code" className="w-56 h-56 mx-auto rounded-lg" />
             </div>
-
-            <p className="text-[11px] font-mono text-cyber mb-4">
-              bintahaassociates.github.io/bunyad/
-            </p>
-
             <div className="flex gap-2">
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(portalLiveUrl);
-                  alert('✅ پورٹل کا لنک کامیابی سے کاپی ہو گیا!');
+                  alert('✅ پورٹل کا لنک کاپی ہو گیا!');
                 }}
                 className="btn-cyber w-full py-2.5 text-xs font-bold"
               >
-                Copy Web Link
+                Copy Link
               </button>
               <button
                 onClick={() => setQrOpen(false)}
-                className="btn-ghost w-full py-2.5 text-xs font-bold text-platinum/80"
+                className="btn-ghost w-full py-2.5 text-xs font-bold"
               >
                 Close
               </button>
@@ -306,37 +324,6 @@ export default function App() {
           </div>
         </div>
       )}
-
-      {/* Footer */}
-      <footer className="glass-strong border-t border-cyber/20 py-10 px-4 text-center text-xs text-platinum/60 space-y-4">
-        <div className="flex items-center justify-center gap-2 text-cyber font-mono font-bold">
-          <span>Bin Taha Associates & Builders</span> • <span>PEC Category-C & FBR Verified</span>
-        </div>
-        <p className="max-w-xl mx-auto">
-          Executive Office: Sector J, Main Boulevard, LDA Avenue 1, Raiwind Road, Lahore. Supervised directly by CEO Taha Mubeen Bhutta.
-        </p>
-        <div className="flex items-center justify-center gap-4 text-platinum/80 pt-2 font-mono">
-          <a href={`tel:${CEO_PHONE}`} className="hover:text-cyber">
-            Phone: 0321-9404812
-          </a>
-          <span>•</span>
-          <a href="mailto:bintahacrm@gmail.com" className="hover:text-cyber">
-            bintahacrm@gmail.com
-          </a>
-          <span>•</span>
-          <a
-            href={waLink(CEO_PHONE, 'Assalam-o-Alaikum CEO Taha Mubeen Bhutta, inquiring from BUNYAD PropTech Portal.')}
-            target="_blank"
-            rel="noreferrer"
-            className="text-emerald-400 hover:underline"
-          >
-            Direct WhatsApp
-          </a>
-        </div>
-        <p className="text-[10px] text-platinum/40 pt-4">
-          © 2026 BUNYAD PropTech HUD Platform. All rights reserved.
-        </p>
-      </footer>
     </div>
-  );
+  )
 }

@@ -14,7 +14,6 @@ import AdminPanel from './components/AdminPanel.jsx'
 import AuthHub from './components/AuthHub.jsx'
 import AudioController from './components/AudioController.jsx'
 import AIConsultant from './components/AIConsultant.jsx'
-import AnimatedLogo from './components/AnimatedLogo.jsx'
 import { CEO_NAME, CEO_URDU, CEO_PHONE, HQ, waLink } from './data/societies.js'
 
 const NAV = [
@@ -31,7 +30,6 @@ export default function App() {
   const [introDone, setIntroDone] = useState(false)
   const [replayKey, setReplayKey] = useState(0)
   const [addPropOpen, setAddPropOpen] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [qrOpen, setQrOpen] = useState(false)
 
   const handleDone = useCallback(() => setIntroDone(true), [])
@@ -42,7 +40,6 @@ export default function App() {
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
-    setSidebarOpen(false)
   }, [])
 
   const portalLiveUrl = "https://alezabatol49.github.io/bunyad.pk/"
@@ -56,24 +53,23 @@ export default function App() {
 
       <Ticker />
 
-      {/* Main Glass Header */}
+      {/* Main Clean HUD Header - No Double Boxes */}
       <header className="sticky top-0 z-50 glass-strong border-b border-cyber/20 backdrop-blur-md">
         <div className="px-4 md:px-8 py-2.5 flex items-center justify-between gap-3">
           
-          {/* Logo & Side Menu Trigger */}
+          {/* Single Clean Animated Hologram Logo & Brand */}
           <div className="flex items-center gap-3 min-w-0">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="w-9 h-9 rounded-xl bg-obsidian2 border border-cyber/50 hover:border-cyber text-cyber flex flex-col items-center justify-center gap-1 shadow-md shadow-cyber/20 hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer"
-              title="Open Navigation Desk"
-            >
-              <span className="w-4 h-0.5 bg-cyber" />
-              <span className="w-3 h-0.5 bg-cyber" />
-              <span className="w-4 h-0.5 bg-cyber" />
-            </button>
-
-            {/* Single 3D Moving Animated Logo */}
-            <AnimatedLogo size="md" />
+            <div className="relative w-11 h-11 rounded-xl bg-obsidian2 border border-cyber shadow-[0_0_15px_rgba(0,240,255,0.4)] flex items-center justify-center p-0.5 shrink-0 overflow-hidden">
+              <video
+                src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-traffic-at-night-41548-large.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-obsidian/30 to-cyber/20 pointer-events-none" />
+            </div>
 
             <div className="min-w-0">
               <p className="font-display font-black text-platinum text-base leading-tight tracking-wide flex items-center gap-2">
@@ -101,7 +97,7 @@ export default function App() {
             })}
           </nav>
 
-          {/* Action Hub */}
+          {/* Action Buttons */}
           <div className="flex items-center gap-2">
             <AudioController />
 
@@ -131,7 +127,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Mobile Submenu Bar */}
+        {/* Mobile Quick Bar */}
         <div className="lg:hidden flex items-center gap-1 px-3 pb-2 overflow-x-auto border-t border-cyber/10 pt-1.5">
           {NAV.map(n => {
             const Icon = n.icon
@@ -148,68 +144,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Slide Menu Drawer */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-[150] flex">
-          <div
-            onClick={() => setSidebarOpen(false)}
-            className="fixed inset-0 bg-obsidian/80 backdrop-blur-sm transition-opacity"
-          />
-          <div className="relative w-80 sm:w-96 max-w-[85vw] h-full bg-obsidian2 border-r border-cyber/30 shadow-2xl p-6 z-10 flex flex-col justify-between overflow-y-auto">
-            <div>
-              <div className="flex items-center justify-between pb-4 border-b border-cyber/20 mb-5">
-                <div className="flex items-center gap-3">
-                  <AnimatedLogo size="sm" />
-                  <div>
-                    <h3 className="font-display font-black text-platinum text-base">BUNYAD Portal</h3>
-                    <p className="text-[10px] text-cyber font-mono font-bold">Master Navigation Desk</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setSidebarOpen(false)}
-                  className="w-8 h-8 rounded-lg bg-obsidian border border-cyber/30 text-platinum hover:text-cyber flex items-center justify-center text-sm font-mono cursor-pointer"
-                >
-                  ✕
-                </button>
-              </div>
-
-              <div className="space-y-2 mb-6">
-                <p className="text-[10px] uppercase font-mono tracking-widest text-cyber/80 font-bold px-1 mb-2">
-                  Portal Modules (ایک کلک پر تمام شعبہ جات):
-                </p>
-                {NAV.map(item => (
-                  <button
-                    key={item.id}
-                    onClick={() => scrollTo(item.id)}
-                    className="w-full p-3 rounded-xl glass border border-cyber/15 hover:border-cyber/60 hover:bg-cyber/10 text-left transition-all flex items-center gap-3 cursor-pointer group"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold text-platinum group-hover:text-cyber transition-colors">
-                        {item.label}
-                      </p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="pt-6 border-t border-cyber/20 text-center space-y-2">
-              <p className="text-xs font-bold text-platinum">CEO {CEO_NAME} ({CEO_URDU})</p>
-              <p className="text-[11px] text-cyber font-mono font-bold">Direct: {CEO_PHONE}</p>
-              <a
-                href={waLink(CEO_PHONE, 'Assalam-o-Alaikum CEO Taha Mubeen Bhutta, connecting from BUNYAD Side Menu.')}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full block py-2.5 rounded-xl bg-emerald-600/30 border border-emerald-500 text-emerald-300 font-bold text-xs hover:bg-emerald-600/50 transition-all text-center"
-              >
-                Direct WhatsApp CEO
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Main Sections */}
+      {/* Main Suite with Correct Scrolling IDs */}
       <main className="relative z-10 space-y-12 pb-16">
         <div id="home">
           <HeroLead onOpenAddProperty={() => setAddPropOpen(true)} />
@@ -253,9 +188,6 @@ export default function App() {
 
         {/* Global Footer */}
         <footer className="border-t border-cyber/15 px-4 md:px-8 py-8 text-center glass-strong">
-          <div className="flex items-center justify-center mb-3">
-            <AnimatedLogo size="sm" />
-          </div>
           <p className="font-display font-black text-platinum text-base">
             BUNYAD <span className="font-urdu text-cyber text-xl">بنیاد</span>
           </p>
@@ -274,6 +206,7 @@ export default function App() {
       <AddPropertyModal open={addPropOpen} onClose={() => setAddPropOpen(false)} />
       <AIConsultant />
 
+      {/* QR Modal */}
       {qrOpen && (
         <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-obsidian/85 backdrop-blur-md">
           <div className="glass-strong rounded-3xl cyber-border p-6 sm:p-8 max-w-sm w-full text-center relative">
@@ -290,7 +223,7 @@ export default function App() {
               BUNYAD Digital QR Pass
             </h3>
             <p className="text-xs text-platinum/70 mb-5">
-              موبائل سے اسکین کر کے پورٹل اور ایل ڈی اے ڈیٹا بیس تک رسائی حاصل کریں۔
+              Mobile se scan karke LDA database aur portal open karein.
             </p>
             <div className="bg-obsidian2 p-4 rounded-2xl border border-cyber/30 inline-block mb-4 shadow-inner">
               <img src={qrCodeImageUrl} alt="BUNYAD QR Code" className="w-56 h-56 mx-auto rounded-lg" />
@@ -299,7 +232,7 @@ export default function App() {
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(portalLiveUrl)
-                  alert('✅ پورٹل کا لنک کاپی ہو گیا!')
+                  alert('✅ Portal link copy ho gaya!')
                 }}
                 className="btn-cyber w-full py-2.5 text-xs font-bold cursor-pointer"
               >

@@ -39,7 +39,7 @@ function AdminPanel() {
       <Presence show={open} exitClass="anim-fade-out" exitMs={400}>
         {(exitCls) => (
           <div
-            className={`fixed inset-0 z-[110] flex items-center justify-center p-4 bg-obsidian/85 backdrop-blur anim-fade-in ${exitCls}`}
+            className={`fixed inset-0 z-[100] flex items-center justify-center p-4 bg-obsidian/85 backdrop-blur anim-fade-in ${exitCls}`}
             onClick={() => setOpen(false)}
           >
             <div

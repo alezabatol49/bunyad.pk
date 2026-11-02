@@ -49,7 +49,7 @@ export default function BookingModal({ open, onClose, society, unitLabel }) {
     <Presence show={open && !!society} exitClass="anim-fade-out" exitMs={400}>
       {(exitCls) => (
         <div
-          className={`fixed inset-0 z-[105] flex items-center justify-center p-4 bg-obsidian/85 backdrop-blur anim-fade-in ${exitCls}`}
+          className={`fixed inset-0 z-[100] flex items-center justify-center p-4 bg-obsidian/85 backdrop-blur anim-fade-in ${exitCls}`}
           onClick={close}
         >
           <div

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, memo } from 'react'
-import { Search, X, BadgeCheck, ShieldCheck, MessageCircle, MapPin, ChevronLeft, ChevronRight, ZoomIn, Image, Video, CreditCard } from '../icons.jsx'
+import { Search, X, BadgeCheck, ShieldCheck, MessageCircle, MapPin, ChevronLeft, ChevronRight, ZoomIn, Image, Video, CreditCard, ArrowLeft } from '../icons.jsx'
 import { SOCIETIES, waLink } from '../data/societies.js'
 import { galleryFor, videoTourFor } from '../data/propertyMedia.js'
 import { Presence } from '../lib/motion.jsx'
@@ -56,8 +56,9 @@ function SocietyDirectory() {
           <button
             key={s.id}
             onClick={() => setActive(s)}
-            className="glass rounded-xl p-4 text-left cyber-border group hover-lift transition-all hover:cyber-glow cursor-pointer"
+            className="glass rounded-xl p-4 text-left cyber-border group hover-lift transition-all hover:cyber-glow"
           >
+            {/* Thumbnail preview */}
             <div className="relative mb-3 rounded-lg overflow-hidden h-32 bg-obsidian2">
               <img src={galleryFor(s.id)[0].url} alt={s.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-500" loading="lazy" />
               <div className="absolute inset-0 bg-gradient-to-t from-obsidian2 to-transparent" />
@@ -119,55 +120,44 @@ function SocietyModal({ society, onClose }) {
       <Presence show={!!society} exitClass="anim-fade-out" exitMs={400}>
         {(exitCls) => society && (
           <div
-            className={`fixed inset-0 z-[160] flex items-center justify-center p-4 bg-obsidian/85 backdrop-blur-md anim-fade-in ${exitCls}`}
+            className={`fixed inset-0 z-[100] flex items-center justify-center p-4 bg-obsidian/80 backdrop-blur-sm anim-fade-in ${exitCls}`}
             onClick={closeModal}
           >
             <div
-              className={`glass-strong rounded-2xl cyber-border w-full max-w-2xl max-h-[88vh] overflow-y-auto anim-scale-in shadow-2xl ${exitCls}`}
+              className={`glass-strong rounded-2xl cyber-border w-full max-w-2xl max-h-[88vh] overflow-y-auto anim-scale-in ${exitCls}`}
               onClick={e => e.stopPropagation()}
             >
-              {/* Prominent Header with Back & Close Button */}
-              <div className="sticky top-0 z-30 flex items-center justify-between px-5 py-4 border-b border-cyber/20 bg-obsidian2/95 backdrop-blur-md">
+              <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 border-b border-cyber/20 bg-obsidian2/90 backdrop-blur">
                 <div className="flex items-center gap-3">
-                  <button
-                    onClick={closeModal}
-                    className="px-3 py-1 rounded-lg bg-cyber/10 border border-cyber/40 text-cyber hover:bg-cyber hover:text-obsidian text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
-                  >
-                    <span>← Wapas / Back</span>
+                  <button onClick={closeModal} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-cyber bg-cyber/10 border border-cyber/30 hover:bg-cyber/20 transition-all shrink-0">
+                    <ArrowLeft size={16} /> Wapas / Back
                   </button>
                   <div>
-                    <h3 className="font-display text-lg font-bold text-platinum">{society.name}</h3>
-                    {society.urdu && <p className="font-urdu text-cyber text-xs">{society.urdu}</p>}
+                    <h3 className="font-display text-xl font-bold text-platinum">{society.name}</h3>
+                    {society.urdu && <p className="font-urdu text-cyber text-sm">{society.urdu}</p>}
                   </div>
                 </div>
-                <button 
-                  onClick={closeModal} 
-                  className="w-8 h-8 rounded-lg bg-obsidian border border-cyber/30 text-platinum hover:text-cyber flex items-center justify-center text-sm font-bold transition-all cursor-pointer"
-                  title="Close (Wapas Jayein)"
-                >
-                  ✕
+                <button onClick={closeModal} className="w-9 h-9 rounded-lg bg-obsidian2/80 border border-cyber/30 flex items-center justify-center text-platinum/60 hover:text-cyber hover:bg-cyber/20 transition-all shrink-0">
+                  <X size={18} />
                 </button>
               </div>
 
               <div className="p-5 space-y-5">
                 <p className="text-sm text-platinum/80 leading-relaxed">{society.summary}</p>
 
-                {/* Tabs */}
+                {/* Tabs: Photos | Video Tour */}
                 <div className="flex gap-2">
-                  <button 
-                    onClick={() => setModalTab('photos')}
-                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold border cursor-pointer ${modalTab === 'photos' ? 'btn-cyber border-transparent' : 'btn-ghost'}`}
-                  >
+                  <button onClick={() => setModalTab('photos')}
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold border ${modalTab === 'photos' ? 'btn-cyber border-transparent' : 'btn-ghost'}`}>
                     <Image size={14} /> Photos ({photos.length})
                   </button>
-                  <button 
-                    onClick={() => setModalTab('video')}
-                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold border cursor-pointer ${modalTab === 'video' ? 'btn-cyber border-transparent' : 'btn-ghost'}`}
-                  >
+                  <button onClick={() => setModalTab('video')}
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold border ${modalTab === 'video' ? 'btn-cyber border-transparent' : 'btn-ghost'}`}>
                     <Video size={14} /> Video Tour
                   </button>
                 </div>
 
+                {/* Photo carousel */}
                 {modalTab === 'photos' && (
                   <div>
                     <div className="relative rounded-xl overflow-hidden border border-cyber/20 h-56 bg-obsidian2">
@@ -181,33 +171,25 @@ function SocietyModal({ society, onClose }) {
                       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-obsidian2 to-transparent p-3">
                         <p className="text-sm text-platinum font-semibold">{photos[photoIdx].label}</p>
                       </div>
-                      <button 
-                        onClick={() => setPhotoIdx(i => (i - 1 + photos.length) % photos.length)}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-obsidian2/80 border border-cyber/30 flex items-center justify-center hover:bg-cyber/20 transition-all cursor-pointer"
-                      >
+                      <button onClick={() => setPhotoIdx(i => (i - 1 + photos.length) % photos.length)}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-obsidian2/80 border border-cyber/30 flex items-center justify-center hover:bg-cyber/20 transition-all">
                         <ChevronLeft size={18} className="text-cyber" />
                       </button>
-                      <button 
-                        onClick={() => setPhotoIdx(i => (i + 1) % photos.length)}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-obsidian2/80 border border-cyber/30 flex items-center justify-center hover:bg-cyber/20 transition-all cursor-pointer"
-                      >
+                      <button onClick={() => setPhotoIdx(i => (i + 1) % photos.length)}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-obsidian2/80 border border-cyber/30 flex items-center justify-center hover:bg-cyber/20 transition-all">
                         <ChevronRight size={18} className="text-cyber" />
                       </button>
-                      <button 
-                        onClick={() => setLightbox(true)}
-                        className="absolute top-2 right-2 w-8 h-8 rounded-full bg-obsidian2/80 border border-cyber/30 flex items-center justify-center hover:bg-cyber/20 transition-all cursor-pointer"
-                      >
+                      <button onClick={() => setLightbox(true)}
+                        className="absolute top-2 right-2 w-8 h-8 rounded-full bg-obsidian2/80 border border-cyber/30 flex items-center justify-center hover:bg-cyber/20 transition-all">
                         <ZoomIn size={16} className="text-cyber" />
                       </button>
                     </div>
 
+                    {/* Thumbnails */}
                     <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
                       {photos.map((p, i) => (
-                        <button 
-                          key={i} 
-                          onClick={() => setPhotoIdx(i)}
-                          className={`shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${i === photoIdx ? 'border-cyber cyber-glow' : 'border-cyber/15 opacity-60 hover:opacity-100'}`}
-                        >
+                        <button key={i} onClick={() => setPhotoIdx(i)}
+                          className={`shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 transition-all ${i === photoIdx ? 'border-cyber cyber-glow' : 'border-cyber/15 opacity-60 hover:opacity-100'}`}>
                           <img src={p.url} alt={p.label} className="w-full h-full object-cover" loading="lazy" />
                         </button>
                       ))}
@@ -215,6 +197,7 @@ function SocietyModal({ society, onClose }) {
                   </div>
                 )}
 
+                {/* Video Tour */}
                 {modalTab === 'video' && (
                   <div>
                     <div className="relative rounded-xl overflow-hidden border border-cyber/20 aspect-video bg-obsidian2">
@@ -226,7 +209,7 @@ function SocietyModal({ society, onClose }) {
                         allowFullScreen
                       />
                     </div>
-                    <p className="text-[11px] text-platinum/50 mt-2 text-center">Virtual walkthrough · {society.name}</p>
+                    <p className="text-[11px] text-platinum/50 mt-2 text-center">Virtual walkthrough · {society.name} · powered by YouTube</p>
                   </div>
                 )}
 
@@ -249,16 +232,14 @@ function SocietyModal({ society, onClose }) {
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-2">
-                  <button 
-                    onClick={() => setBookingOpen(true)}
-                    className="btn-cyber flex items-center justify-center gap-2 cursor-pointer"
-                  >
+                  <button onClick={() => setBookingOpen(true)}
+                    className="btn-cyber flex items-center justify-center gap-2">
                     <CreditCard size={16} /> Book / Token Deposit
                   </button>
                   <a
                     href={waLink(`Assalam-u-alaikum CEO Taha Mubeen Bhutta, I'm interested in ${society.name} (${society.blocks}). Please share verified inventory & escrow details.`)}
                     target="_blank" rel="noreferrer"
-                    className="btn-ghost flex items-center justify-center gap-2 cursor-pointer text-center"
+                    className="btn-ghost flex items-center justify-center gap-2"
                   >
                     <MessageCircle size={16} /> WhatsApp CEO · 0321
                   </a>
@@ -269,41 +250,38 @@ function SocietyModal({ society, onClose }) {
         )}
       </Presence>
 
-      {lightbox && (
-        <div
-          className="fixed inset-0 z-[170] flex items-center justify-center p-4 bg-obsidian/95 backdrop-blur-md anim-fade-in"
-          onClick={() => setLightbox(false)}
-        >
-          <button 
-            onClick={() => setLightbox(false)} 
-            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-obsidian2/80 border border-cyber/30 flex items-center justify-center hover:bg-cyber/20 cursor-pointer"
+      {/* Lightbox */}
+      <Presence show={lightbox} exitClass="anim-fade-out" exitMs={300}>
+        {(exitCls) => (
+          <div
+            className={`fixed inset-0 z-[110] flex items-center justify-center p-4 bg-obsidian/95 backdrop-blur-md anim-fade-in ${exitCls}`}
+            onClick={() => setLightbox(false)}
           >
-            <X size={22} className="text-cyber" />
-          </button>
-          <button 
-            onClick={e => { e.stopPropagation(); setPhotoIdx(i => (i - 1 + photos.length) % photos.length) }}
-            className="absolute left-4 w-10 h-10 rounded-full bg-obsidian2/80 border border-cyber/30 flex items-center justify-center hover:bg-cyber/20 cursor-pointer"
-          >
-            <ChevronLeft size={22} className="text-cyber" />
-          </button>
-          <img
-            key={photoIdx}
-            src={photos[photoIdx]?.url}
-            alt={photos[photoIdx]?.label}
-            className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg anim-fade-in"
-            onClick={e => e.stopPropagation()}
-          />
-          <button 
-            onClick={e => { e.stopPropagation(); setPhotoIdx(i => (i + 1) % photos.length) }}
-            className="absolute right-4 w-10 h-10 rounded-full bg-obsidian2/80 border border-cyber/30 flex items-center justify-center hover:bg-cyber/20 cursor-pointer"
-          >
-            <ChevronRight size={22} className="text-cyber" />
-          </button>
-          <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-cyber">
-            {photos[photoIdx]?.label} · {photoIdx + 1} / {photos.length}
-          </p>
-        </div>
-      )}
+            <button onClick={() => setLightbox(false)} className="absolute top-4 left-4 flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-cyber bg-cyber/10 border border-cyber/30 hover:bg-cyber/20 transition-all">
+              <ArrowLeft size={16} /> Wapas / Back
+            </button>
+            <button onClick={() => setLightbox(false)} className="absolute top-4 right-4 w-10 h-10 rounded-full bg-obsidian2/80 border border-cyber/30 flex items-center justify-center hover:bg-cyber/20">
+              <X size={22} className="text-cyber" />
+            </button>
+            <button onClick={e => { e.stopPropagation(); setPhotoIdx(i => (i - 1 + photos.length) % photos.length) }}
+              className="absolute left-4 w-10 h-10 rounded-full bg-obsidian2/80 border border-cyber/30 flex items-center justify-center hover:bg-cyber/20">
+              <ChevronLeft size={22} className="text-cyber" />
+            </button>
+            <img
+              key={photoIdx}
+              src={photos[photoIdx]?.url}
+              alt={photos[photoIdx]?.label}
+              className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg anim-fade-in"
+              onClick={e => e.stopPropagation()}
+            />
+            <button onClick={e => { e.stopPropagation(); setPhotoIdx(i => (i + 1) % photos.length) }}
+              className="absolute right-4 w-10 h-10 rounded-full bg-obsidian2/80 border border-cyber/30 flex items-center justify-center hover:bg-cyber/20">
+              <ChevronRight size={22} className="text-cyber" />
+            </button>
+            <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-cyber">{photos[photoIdx]?.label} · {photoIdx + 1} / {photos.length}</p>
+          </div>
+        )}
+      </Presence>
 
       <BookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} society={society} unitLabel={`${society?.blocks}`} />
     </>

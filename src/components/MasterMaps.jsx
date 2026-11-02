@@ -1,174 +1,171 @@
-import React, { useState } from 'react';
-import { CEO_PHONE, waLink } from '../data/societies.js';
+import React, { useState, memo, useMemo, useCallback } from 'react'
+import { MapIcon, Search, ZoomIn, X, Compass, MapPin } from '../icons.jsx'
+import { SOCIETIES } from '../data/societies.js'
 
-const SECTORS = [
-  { block: 'Sector A', size: '1 Kanal, 10 Marla', possession: 'Full Possession', status: 'Developed', highlight: 'Main Boulevard Entry from Raiwind Road' },
-  { block: 'Sector B', size: '1 Kanal, 10 Marla', possession: 'Full Possession', status: 'Developed', highlight: 'Direct Access from Shahkam Chowk Flyover' },
-  { block: 'Sector C', size: '10 Marla, 1 Kanal', possession: 'Full Possession', status: 'High Construction', highlight: 'Prime Central Commercial & Park Facing' },
-  { block: 'Sector D', size: '10 Marla, 5 Marla', possession: 'Full Possession', status: 'High Density', highlight: 'Ideal Residential & Rapid House Construction' },
-  { block: 'Sector E', size: '10 Marla, 1 Kanal', possession: 'Partial Possession', status: 'Development in Progress', highlight: 'Near Defence Road Link & Green Belts' },
-  { block: 'Sector F', size: '1 Kanal, 10 Marla', possession: 'Full Possession', status: 'Developed', highlight: 'Adjacent to Jubilee Town & Canal Link' },
-  { block: 'Sector G', size: '10 Marla, 1 Kanal', possession: 'Partial Possession', status: 'Active Development', highlight: 'Surrounded by Wide Boulevards' },
-  { block: 'Sector H', size: '10 Marla, 1 Kanal', possession: 'In Litigation / Non-Possession', status: 'Clearance Underway', highlight: 'LDA Balloting & Litigation Resolution Desk' },
-  { block: 'Sector J', size: '5 Marla, 10 Marla, 1 Kanal', possession: 'Full Possession', status: 'Bin Taha Flagship Office', highlight: 'Prime Commercial Hub & Executive Dealings' },
-  { block: 'Sector K', size: '1 Kanal, 10 Marla', possession: 'Full Possession', status: 'Prime Residential', highlight: 'Wide 80ft Boulevards & Underground Electrification' },
-  { block: 'Sector L', size: '1 Kanal, 2 Kanal', possession: 'Developing', status: 'Investment Hotspot', highlight: 'Executive Villas & Turnkey Construction' },
-  { block: 'Sector M', size: '1 Kanal, 10 Marla', possession: 'Full Possession', status: 'Rapid Construction', highlight: 'Direct Connection to Canal Bank Road' }
-];
+const CORRIDORS = [
+  { id: 'all', label: 'All Corridors' },
+  { id: 'raiwind', label: 'Raiwind Road & Canal' },
+  { id: 'southern', label: 'Southern, Central & Cantt' },
+  { id: 'ring', label: 'Ring Road' },
+  { id: 'ferozepur', label: 'Ferozepur Road' }
+]
 
-export default function MasterMaps() {
-  const [activeSector, setActiveSector] = useState(SECTORS[8]); // Sector J default
-  const [zoomLevel, setZoomLevel] = useState(1);
+// Map corridor IDs to society corridor values
+function matchCorridor(society, corridorId) {
+  if (corridorId === 'all') return true
+  if (corridorId === 'raiwind') return society.corridor === 'Raiwind Road & Canal'
+  if (corridorId === 'southern') return society.corridor === 'Southern, Central & Cantt'
+  if (corridorId === 'ring') return society.corridor.includes('Cantt') || society.corridor.includes('Central')
+  if (corridorId === 'ferozepur') return society.corridor.includes('Southern') || society.name.includes('Ferozepur')
+  return true
+}
 
-  const officialMapUrl = 'https://drive.google.com/file/d/1Iqfo07dIIxBm-DiGKJ6sbodc-o2ieDu7/view?usp=drivesdk';
+function MasterMaps() {
+  const [query, setQuery] = useState('')
+  const [corridor, setCorridor] = useState('all')
+  const [active, setActive] = useState(null)
 
-  const handleConsultSector = (sec) => {
-    const text = `Assalam-o-Alaikum CEO Taha Mubeen Bhutta,\nI am interested in LDA Avenue 1 ${sec.block} (${sec.size}). Please share available inventory, verified DC rates, and possession status.`;
-    window.open(waLink(CEO_PHONE, text), '_blank');
-  };
+  const filtered = useMemo(() => {
+    const q = query.toLowerCase().trim()
+    return SOCIETIES.filter(s => {
+      const matchQ = !q || s.name.toLowerCase().includes(q) || (s.urdu || '').includes(q) || (s.blocks || '').toLowerCase().includes(q)
+      const matchC = matchCorridor(s, corridor)
+      return matchQ && matchC
+    })
+  }, [query, corridor])
+
+  const selectSociety = useCallback((s) => setActive(s), [])
+  const closeMap = useCallback(() => setActive(null), [])
 
   return (
-    <section id="master-maps" className="py-12 px-4 sm:px-6 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 border-b border-cyber/20 pb-5">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-cyber animate-pulse"></span>
-            <span className="text-xs uppercase tracking-widest text-cyber font-mono font-bold">
-              Official Master Layout & Plot Navigator
-            </span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-platinum font-display">
-            LDA Avenue 1 Master Plan <span className="text-cyber text-lg block sm:inline font-arabic sm:mr-2">ماسٹر پلان و سیکٹر نقشہ جات</span>
-          </h2>
-          <p className="text-xs sm:text-sm text-platinum/70 mt-1 max-w-2xl">
-            Official high-definition layout plan for LDA Avenue 1 (Sectors A to M). Verified plot locations, possession demarcation, and direct CEO consultation.
-          </p>
-        </div>
+    <section id="master-maps" className="px-4 md:px-8 py-10">
+      <p className="hud-label">Module 09 · Master Plans & Society Maps</p>
+      <h2 className="font-display text-2xl md:text-4xl font-black text-platinum mb-2">
+        Society <span className="text-cyber">Master Plans</span> & LDA Maps
+      </h2>
+      <p className="text-platinum/60 text-sm mb-6">Interactive society map viewer with corridor filters. Search by society name or sector/block to view master plans.</p>
 
-        <div className="flex items-center gap-2">
-          <a
-            href={officialMapUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="btn-cyber text-xs px-4 py-2.5 flex items-center gap-2 font-bold whitespace-nowrap"
+      <div className="flex flex-col sm:flex-row gap-3 mb-5">
+        <div className="relative flex-1">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-cyber/60" />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Search by society or block (e.g. LDA Avenue 1, Block J)…"
+            className="w-full bg-obsidian2 border border-cyber/20 rounded-lg pl-9 pr-3 py-2 text-sm text-platinum focus:outline-none focus:border-cyber"
+          />
+        </div>
+        <select value={corridor} onChange={e => setCorridor(e.target.value)}
+          className="bg-obsidian2 border border-cyber/20 rounded-lg px-3 py-2 text-sm text-platinum focus:outline-none focus:border-cyber">
+          {CORRIDORS.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+        </select>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        {filtered.map(s => (
+          <button
+            key={s.id}
+            onClick={() => selectSociety(s)}
+            className="glass rounded-xl p-4 text-left cyber-border hover-lift transition-all group hover:cyber-glow"
           >
-            <span>Download High-Res Vector Map (15 MB)</span>
-          </a>
-        </div>
-      </div>
-
-      {/* Main Grid: Sector Navigator + Map Viewer */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left: Sectors List */}
-        <div className="lg:col-span-4 space-y-2 max-h-[580px] overflow-y-auto pr-2 scrollbar-thin">
-          <p className="text-xs font-mono text-cyber font-bold mb-2 uppercase">Select Sector (A - M):</p>
-          {SECTORS.map((sec) => (
-            <div
-              key={sec.block}
-              onClick={() => setActiveSector(sec)}
-              className={`p-3.5 rounded-xl cursor-pointer transition-all border text-xs ${
-                activeSector.block === sec.block
-                  ? 'bg-cyber/15 border-cyber shadow-lg shadow-cyber/10'
-                  : 'glass border-cyber/15 hover:border-cyber/40'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-platinum text-sm">{sec.block}</span>
-                <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${
-                  sec.possession.includes('Full') ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
-                }`}>
-                  {sec.possession}
-                </span>
+            <div className="flex items-start gap-3 mb-2">
+              <div className="w-10 h-10 rounded-lg bg-cyber/10 border border-cyber/30 flex items-center justify-center shrink-0">
+                <MapIcon size={18} className="text-cyber" />
               </div>
-              <p className="text-[11px] text-platinum/60 mt-1">Sizes: {sec.size}</p>
-              <p className="text-[10px] text-cyber/80 font-mono mt-0.5">Key: {sec.highlight}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Right: Map Interactive HUD */}
-        <div className="lg:col-span-8 flex flex-col justify-between glass-strong rounded-2xl cyber-border p-5 relative overflow-hidden">
-          <div className="flex items-center justify-between pb-3 border-b border-cyber/15 mb-4">
-            <div>
-              <span className="text-xs font-mono text-cyber uppercase">Active Selection:</span>
-              <h3 className="font-bold text-platinum text-lg">{activeSector.block} Details</h3>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setZoomLevel(z => Math.max(0.8, z - 0.2))}
-                className="btn-ghost px-2.5 py-1 text-xs"
-              >
-                - Zoom
-              </button>
-              <button
-                onClick={() => setZoomLevel(1)}
-                className="btn-ghost px-2.5 py-1 text-xs"
-              >
-                Reset
-              </button>
-              <button
-                onClick={() => setZoomLevel(z => Math.min(2.2, z + 0.2))}
-                className="btn-ghost px-2.5 py-1 text-xs"
-              >
-                + Zoom
-              </button>
-            </div>
-          </div>
-
-          {/* Interactive Map Visual Stage */}
-          <div className="relative w-full h-[360px] rounded-xl overflow-hidden bg-obsidian2 border border-cyber/20 flex items-center justify-center">
-            <div
-              style={{ transform: `scale(${zoomLevel})`, transition: 'transform 0.25s ease' }}
-              className="w-full h-full flex items-center justify-center p-4 relative"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1524813686514-a57563d77d66?auto=format&fit=crop&w=1400&q=80"
-                alt="LDA Avenue 1 Master Map"
-                className="w-full h-full object-cover opacity-35 rounded-lg"
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-obsidian/40 backdrop-blur-[2px]">
-                <div className="w-14 h-14 rounded-full border-2 border-cyber flex items-center justify-center text-cyber font-mono font-black text-xl mb-3 shadow-lg shadow-cyber/30 animate-pulse">
-                  {activeSector.block.replace('Sector ', '')}
-                </div>
-                <h4 className="text-lg font-black text-platinum mb-1">{activeSector.block} — LDA Avenue 1</h4>
-                <p className="text-xs text-platinum/80 max-w-md mb-2">{activeSector.highlight}</p>
-                <div className="flex flex-wrap gap-2 justify-center text-[10px] font-mono">
-                  <span className="px-2.5 py-1 rounded bg-obsidian2 border border-cyber/30 text-cyber font-bold">
-                    Possession: {activeSector.possession}
-                  </span>
-                  <span className="px-2.5 py-1 rounded bg-obsidian2 border border-cyber/30 text-platinum/90">
-                    Sizes: {activeSector.size}
-                  </span>
-                </div>
+              <div className="min-w-0">
+                <h3 className="font-bold text-platinum text-[13px] leading-tight group-hover:text-cyber transition-colors truncate">{s.name}</h3>
+                {s.urdu && <p className="font-urdu text-cyber/70 text-sm">{s.urdu}</p>}
               </div>
             </div>
-          </div>
+            <div className="flex items-center gap-2 text-[11px] text-platinum/60">
+              <MapPin size={11} className="text-cyber" /> {s.corridor}
+            </div>
+            <p className="text-[11px] text-cyber font-semibold mt-1">{s.blocks}</p>
+          </button>
+        ))}
+        {filtered.length === 0 && (
+          <p className="col-span-full text-center text-platinum/50 py-8">No societies match your search.</p>
+        )}
+      </div>
 
-          {/* Bottom Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-cyber/15 mt-4">
-            <p className="text-[11px] text-platinum/60 text-center sm:text-left">
-              Official verification & litigation-free allotment records verified by Bin Taha Associates.
-            </p>
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <a
-                href={officialMapUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="btn-ghost text-xs px-3 py-2 text-center w-full sm:w-auto"
-              >
-                Open Full Screen
-              </a>
-              <button
-                onClick={() => handleConsultSector(activeSector)}
-                className="btn-cyber text-xs px-4 py-2 text-center font-bold whitespace-nowrap w-full sm:w-auto"
-              >
-                Inquire Plots in {activeSector.block}
-              </button>
+      {/* Map Viewer Modal */}
+      {active && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-obsidian/90 backdrop-blur-md anim-fade-in" onClick={closeMap}>
+          <div className="glass-strong rounded-2xl cyber-border w-full max-w-4xl max-h-[90vh] overflow-y-auto anim-scale-in" onClick={e => e.stopPropagation()}>
+            <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 border-b border-cyber/20 bg-obsidian2/90 backdrop-blur">
+              <div className="flex items-center gap-2">
+                <Compass size={18} className="text-cyber" />
+                <div>
+                  <h3 className="font-display text-lg font-bold text-platinum">{active.name} — Master Plan</h3>
+                  <p className="text-[11px] text-cyber/70">{active.blocks} · {active.corridor}</p>
+                </div>
+              </div>
+              <button onClick={closeMap} className="text-platinum/60 hover:text-cyber p-2"><X size={20} /></button>
+            </div>
+
+            <div className="p-5">
+              {/* Map placeholder — SVG grid layout representing blocks */}
+              <div className="relative rounded-xl overflow-hidden border border-cyber/30 bg-obsidian2 h-80 mb-4 grid-bg">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-16 h-16 rounded-full bg-cyber/10 border border-cyber/30 flex items-center justify-center mx-auto mb-3 cyber-glow anim-pulse">
+                      <MapIcon size={32} className="text-cyber" />
+                    </div>
+                    <p className="text-sm text-platinum font-semibold">{active.name}</p>
+                    <p className="text-[11px] text-platinum/60 mt-1">Interactive master plan — {active.blocks}</p>
+                  </div>
+                </div>
+                {/* Block grid overlay */}
+                <div className="absolute inset-0 grid grid-cols-4 gap-1 p-4 opacity-40">
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <div key={i} className="rounded border border-cyber/20 bg-cyber/5 flex items-center justify-center">
+                      <span className="text-[9px] text-cyber/40">{String.fromCharCode(65 + i)}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="absolute bottom-2 right-2 flex gap-1">
+                  <button className="w-8 h-8 rounded-lg bg-obsidian2/80 border border-cyber/30 flex items-center justify-center hover:bg-cyber/20 transition-all">
+                    <ZoomIn size={14} className="text-cyber" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                {[
+                  ['NOC Status', active.noc],
+                  ['2026 DC Rate', active.dcRate],
+                  ['FBR Valuation', active.fbr],
+                  ['Corridor', active.corridor]
+                ].map(([k, v]) => (
+                  <div key={k} className="glass rounded-lg px-3 py-2 border border-cyber/15">
+                    <p className="text-[10px] uppercase tracking-wider text-cyber/70">{k}</p>
+                    <p className="text-[12px] text-platinum font-semibold mt-0.5">{v}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-2">
+                <button
+                  onClick={() => alert(`Downloading high-res master plan for ${active.name}…\n\nIn production, this fetches the official PDF/vector map from Supabase Storage.`)}
+                  className="btn-cyber flex-1 flex items-center justify-center gap-2 text-xs"
+                >
+                  <MapIcon size={14} /> Download High-Res Map (PDF)
+                </button>
+                <a
+                  href={`https://wa.me/923219404812?text=${encodeURIComponent(`Assalam-u-alaikum CEO Taha Mubeen Bhutta, I need the master plan for ${active.name} (${active.blocks}) via Bunyad.pk.`)}`}
+                  target="_blank" rel="noreferrer"
+                  className="btn-ghost flex-1 flex items-center justify-center gap-2 text-xs"
+                >
+                  Request Map via WhatsApp
+                </a>
+              </div>
+              <p className="text-[10px] text-platinum/40 text-center mt-3">Official LDA & society master plans are verified by Bin Taha Associates. Contact CEO for stamped hard copies.</p>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
-  );
+  )
 }
+
+export default memo(MasterMaps)

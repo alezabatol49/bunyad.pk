@@ -127,11 +127,16 @@ export default function AudioController() {
     <button
       onClick={toggle}
       className="btn-ghost text-xs flex items-center gap-1.5 relative"
-      title={on ? 'Mute ambient sound' : 'Play ambient sound'}
-      aria-label={on ? 'Mute ambient sound' : 'Play ambient sound'}
+      title={on ? 'Mute ambient sound' : 'Tap to enable ambient sound'}
+      aria-label={on ? 'Mute ambient sound' : 'Tap to enable ambient sound'}
     >
-      {on ? <Volume2 size={13} /> : <VolumeX size={13} />}
-      <span className="hidden sm:inline">{on ? 'Sound On' : 'Sound Off'}</span>
+      {on ? <Volume2 size={13} className="text-cyber" /> : (
+        <span className="relative flex items-center justify-center">
+          <VolumeX size={13} className="text-cyber" />
+          <span className="absolute inset-0 rounded-full bg-cyber/30 anim-pulse" style={{ animationDuration: '1.5s' }} />
+        </span>
+      )}
+      <span className="hidden sm:inline">{on ? 'Sound On' : 'Tap to Play'}</span>
       {on && (
         <span className="flex items-end gap-0.5 ml-1 h-3">
           {Array.from({ length: NUM_BARS }).map((_, i) => (

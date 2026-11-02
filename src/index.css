@@ -41,8 +41,8 @@ img,video{max-width:100%;height:auto}
 html,body,#root{height:100%}
 body{background:radial-gradient(circle at 20% 10%,#0a1726 0%,#050b14 55%,#03070d 100%);color:#F8FAFC;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 
-/* Hardware acceleration for root wrappers — eliminates repaint flicker */
-body,#root,.glass,.glass-strong{transform:translateZ(0);backface-visibility:hidden;perspective:1000px;will-change:auto}
+/* Keep fixed overlays stable; only animated layers use compositor promotion. */
+.glass,.glass-strong{backface-visibility:hidden;will-change:auto}
 ::selection{background:rgba(0,242,254,.3);color:#F8FAFC}
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-track{background:#050b14}

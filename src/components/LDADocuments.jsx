@@ -1,135 +1,126 @@
-import React, { useState, useMemo } from 'react';
-import { LDA_FORMS, LDA_CATEGORIES } from '../data/ldaFormsData.js';
-import { CEO_PHONE, waLink } from '../data/societies.js';
+import React, { memo } from 'react'
+import { FileText, Download, Gavel, CheckCircle2 } from '../icons.jsx'
+import { CEO_PHONE } from '../data/societies.js'
 
-export default function LDADocuments() {
-  const [selectedCategory, setSelectedCategory] = useState('All Documents');
-  const [searchQuery, setSearchQuery] = useState('');
+const LDA_FORMS = [
+  {
+    id: 'transfer',
+    name: 'Transfer Application Form (Intiqal)',
+    desc: 'Official LDA form for property ownership transfer / mutation.',
+    size: 'PDF · 220 KB',
+    category: 'Transfer'
+  },
+  {
+    id: 'possession',
+    name: 'Possession Application Form',
+    desc: 'Apply for physical possession of allotted plot in LDA schemes.',
+    size: 'PDF · 160 KB',
+    category: 'Possession'
+  },
+  {
+    id: 'noc',
+    name: 'NOC Verification Form',
+    desc: 'Request No Objection Certificate verification for any LDA-approved society.',
+    size: 'PDF · 140 KB',
+    category: 'Verification'
+  },
+  {
+    id: 'ndc',
+    name: 'NDC Form (No Demand Certificate)',
+    desc: 'Apply for No Demand Certificate — confirms all dues cleared before transfer.',
+    size: 'PDF · 130 KB',
+    category: 'Dues'
+  },
+  {
+    id: 'duplicate',
+    name: 'Duplicate Allotment Letter Undertaking',
+    desc: 'Undertaking affidavit for issuance of duplicate allotment letter.',
+    size: 'PDF · 110 KB',
+    category: 'Allotment'
+  },
+  {
+    id: 'siteplan',
+    name: 'Site Plan Requisition',
+    desc: 'Request official site plan / layout plan for a specific block or sector.',
+    size: 'PDF · 190 KB',
+    category: 'Planning'
+  },
+  {
+    id: 'mutation',
+    name: 'Mutation / Transfer Fee Deposit Slip',
+    desc: 'Standard deposit slip for LDA mutation and transfer fee payment.',
+    size: 'PDF · 95 KB',
+    category: 'Transfer'
+  },
+  {
+    id: 'affidavit',
+    name: 'Ownership Affidavit Template',
+    desc: 'Sworn affidavit template declaring ownership and title of property.',
+    size: 'PDF · 100 KB',
+    category: 'Legal'
+  }
+]
 
-  const filteredForms = useMemo(() => {
-    return LDA_FORMS.filter(form => {
-      const matchCat = selectedCategory === 'All Documents' || form.category === selectedCategory;
-      const matchSearch = searchQuery.trim() === '' ||
-        form.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        form.urduTitle.includes(searchQuery) ||
-        form.desc.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchCat && matchSearch;
-    });
-  }, [selectedCategory, searchQuery]);
+const CATEGORIES = ['All', 'Transfer', 'Possession', 'Verification', 'Dues', 'Allotment', 'Planning', 'Legal']
 
-  const handleConsultation = (formTitle) => {
-    const text = `Assalam-o-Alaikum CEO Taha Mubeen Bhutta,\nI need legal consultancy & paperwork facilitation for LDA Official Form: "${formTitle}". Please guide me with the procedure.`;
-    window.open(waLink(CEO_PHONE, text), '_blank');
-  };
-
+function LDADocuments() {
   return (
-    <section id="lda-documents" className="py-12 px-4 sm:px-6 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 border-b border-cyber/20 pb-5">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-cyber animate-pulse"></span>
-            <span className="text-xs uppercase tracking-widest text-cyber font-mono font-bold">
-              Official Legal & Transfer Portal
-            </span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-platinum font-display">
-            LDA Official Forms Hub <span className="text-cyber text-lg block sm:inline font-arabic sm:mr-2">ایل ڈی اے سرکاری دستاویزات و فارمز</span>
-          </h2>
-          <p className="text-xs sm:text-sm text-platinum/70 mt-1 max-w-2xl">
-            Download verified official LDA Lahore forms, checklists, transfer sets, and exemption drafts. Direct paperwork facilitation supervised by CEO Taha Mubeen Bhutta.
-          </p>
-        </div>
+    <section id="lda-docs" className="px-4 md:px-8 py-10">
+      <p className="hud-label">Module 08 · LDA Forms & Legal Documents Hub</p>
+      <h2 className="font-display text-2xl md:text-4xl font-black text-platinum mb-2">
+        Official <span className="text-cyber">LDA</span> Forms & Legal Documents
+      </h2>
+      <p className="text-platinum/60 text-sm mb-6">Download standardized LDA forms for transfer, possession, NOC, NDC and more. All forms reviewed by Bin Taha Associates legal desk.</p>
 
-        {/* Search */}
-        <div className="w-full md:w-72">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search forms by name or Urdu..."
-            className="w-full bg-obsidian2 border border-cyber/30 rounded-xl px-4 py-2.5 text-xs text-platinum placeholder-platinum/40 focus:outline-none focus:border-cyber shadow-inner"
-          />
-        </div>
-      </div>
-
-      {/* Category Pills */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-6 scrollbar-thin">
-        {LDA_CATEGORIES.map(cat => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
-              selectedCategory === cat
-                ? 'bg-cyber text-obsidian font-bold shadow-lg shadow-cyber/20'
-                : 'glass text-platinum/70 hover:text-cyber hover:border-cyber/40'
-            }`}
-          >
-            {cat}
-          </button>
+      <div className="flex flex-wrap gap-2 mb-5">
+        {CATEGORIES.map(c => (
+          <span key={c} className="text-[11px] px-3 py-1.5 rounded-full border border-cyber/20 text-platinum/70 bg-obsidian2/50">
+            {c}
+          </span>
         ))}
       </div>
 
-      {/* Forms Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredForms.map(doc => (
-          <div
-            key={doc.id}
-            className="glass-strong rounded-2xl cyber-border p-5 flex flex-col justify-between hover:border-cyber/60 transition-all group"
-          >
-            <div>
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyber/10 text-cyber border border-cyber/20">
-                  {doc.category}
-                </span>
-                <span className="text-[10px] font-mono text-platinum/40">PDF OFFICIAL</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        {LDA_FORMS.map(f => (
+          <div key={f.id} className="glass rounded-xl p-4 border border-cyber/15 hover-lift transition-all group">
+            <div className="flex items-start gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg bg-cyber/10 border border-cyber/30 flex items-center justify-center shrink-0">
+                <FileText size={18} className="text-cyber" />
               </div>
-
-              <h3 className="font-bold text-platinum text-sm group-hover:text-cyber transition-colors leading-snug">
-                {doc.title}
-              </h3>
-              <p className="text-xs text-platinum/60 font-arabic mt-1 mb-2">
-                {doc.urduTitle}
-              </p>
-              <p className="text-[11px] text-platinum/70 leading-relaxed mb-4">
-                {doc.desc}
-              </p>
-
-              <div className="flex flex-wrap gap-1.5 mb-5">
-                {doc.tags.map(t => (
-                  <span key={t} className="text-[9px] px-2 py-0.5 rounded bg-obsidian2 text-platinum/50 border border-white/5">
-                    #{t}
-                  </span>
-                ))}
+              <div className="min-w-0 flex-1">
+                <h3 className="font-semibold text-platinum text-[13px] leading-tight group-hover:text-cyber transition-colors">{f.name}</h3>
+                <span className="text-[10px] text-cyber/60 uppercase tracking-wider">{f.category}</span>
               </div>
             </div>
-
-            {/* Actions */}
-            <div className="grid grid-cols-2 gap-2 pt-3 border-t border-cyber/15">
-              <a
-                href={doc.driveUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="btn-cyber text-center py-2 text-xs flex items-center justify-center gap-1.5 font-bold"
-              >
-                <span>View / Download</span>
-              </a>
+            <p className="text-[11px] text-platinum/60 leading-relaxed mb-3">{f.desc}</p>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-platinum/40">{f.size}</span>
               <button
-                onClick={() => handleConsultation(doc.title)}
-                className="btn-ghost text-center py-2 text-xs flex items-center justify-center gap-1.5 text-platinum/80 hover:text-cyber"
+                onClick={() => alert(`Downloading ${f.name}…\n\nIn production, this fetches the official PDF template from Supabase Storage. Contact CEO ${CEO_PHONE} for the live stamped document.`)}
+                className="btn-ghost text-[11px] px-3 py-1.5 flex items-center gap-1.5"
               >
-                <span>Legal Guidance</span>
+                <Download size={13} /> Download
               </button>
             </div>
           </div>
         ))}
       </div>
 
-      {filteredForms.length === 0 && (
-        <div className="glass rounded-2xl p-12 text-center text-platinum/60 text-xs">
-          No LDA document matches your search. Contact CEO Desk for custom file processing.
+      <div className="mt-6 glass-strong rounded-xl cyber-border p-5 flex flex-col sm:flex-row items-center gap-4">
+        <div className="w-12 h-12 rounded-lg bg-cyber/10 border border-cyber/30 flex items-center justify-center shrink-0">
+          <Gavel size={24} className="text-cyber" />
         </div>
-      )}
+        <div className="flex-1 text-center sm:text-left">
+          <p className="text-sm text-platinum font-semibold">Need help filling out LDA forms?</p>
+          <p className="text-[12px] text-platinum/60 mt-1">Our legal desk assists with form filling, submission, and follow-up at the LDA office. CEO {CEO_PHONE} personally oversees every case.</p>
+        </div>
+        <a href={`https://wa.me/923219404812?text=${encodeURIComponent('Assalam-u-alaikum CEO Taha Mubeen Bhutta, I need help with LDA forms via Bunyad.pk.')}`} target="_blank" rel="noreferrer"
+          className="btn-cyber text-xs flex items-center gap-2 shrink-0">
+          <CheckCircle2 size={14} /> Request Legal Help
+        </a>
+      </div>
     </section>
-  );
+  )
 }
+
+export default memo(LDADocuments)

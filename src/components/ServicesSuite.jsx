@@ -1,129 +1,90 @@
-import React from 'react';
-import { CEO_PHONE, waLink } from '../data/societies.js';
+import React, { memo } from 'react'
+import { Calculator, Gavel, Layers, Wrench, ShieldCheck, MessageCircle, Send } from '../icons.jsx'
+import { waLink, CEO_PHONE } from '../data/societies.js'
 
 const SERVICES = [
   {
-    id: 'dc-valuation',
+    id: 'valuation',
     title: 'Plot Valuation & DC Rates Audit',
-    urduTitle: 'پلاٹ کی درست ویلیویشن و ڈی سی ریٹس آڈٹ',
-    desc: 'Government DC rates vs actual market trend assessment, FBR tax computation (236-C / 236-K) for buyers and sellers.',
-    badge: 'FBR & Revenue Verified',
-    icon: '📊'
+    icon: Calculator,
+    desc: 'Get a certified valuation of your plot with 2026 DC rate comparison, FBR valuation table lookup, and market-rate analysis — backed by Bin Taha Associates.',
+    points: ['2026 DC Rate comparison', 'FBR valuation table', 'Market trend analysis', 'Certified valuation report']
   },
   {
-    id: 'lda-legal',
+    id: 'legal',
     title: 'LDA Legal & Registry Verification',
-    urduTitle: 'ایل ڈی اے لیگل ریکارڈ و رجسٹری تصدیق',
-    desc: 'One-window document verification, title deed search, stay order investigation, and litigation-free clearance.',
-    badge: '100% Legal Safeguard',
-    icon: '⚖️'
+    icon: Gavel,
+    desc: 'Full legal title verification, registry check, mutation status, and encumbrance-free certificate for any LDA-approved society.',
+    points: ['Title & ownership verification', 'Mutation / Intiqal status', 'Encumbrance certificate', 'Registry legal opinion']
+  },
+  {
+    id: 'planning',
+    title: 'Layout & Master Planning',
+    icon: Layers,
+    desc: 'Architectural layout planning, LDA bylaw compliance, setback calculations, and master plan consultation for residential & commercial plots.',
+    points: ['Floor plan & layout design', 'LDA setback compliance', 'Covered area calculation', 'Master plan consultation']
   },
   {
     id: 'construction',
-    title: 'Civil Construction & Turnkey Builds',
-    urduTitle: 'تعمیرات و ٹرن کی لگژری ویلاز',
-    desc: 'PEC Category-C registered engineering supervision, A-Grade material estimation (Grade-60 steel, cement, crush) and grey structure to finish build.',
-    badge: 'PEC Category-C Standard',
-    icon: '🏗️'
+    title: 'Construction & Engineering Consultation',
+    icon: Wrench,
+    desc: 'End-to-end civil construction supervision — foundation to handover — with structural engineering, material procurement, and escrow milestone protection.',
+    points: ['Structural engineering', 'Gray structure to turnkey', 'Material procurement', 'Escrow milestone protection']
   },
   {
     id: 'escrow',
-    title: 'Token Escrow & Secure Deal Desk',
-    urduTitle: 'ٹوکن بیعانہ و محفوظ ڈیل ایسکرو ڈیسک',
-    desc: 'Third-party secure escrow holding for token money, registry payment milestones, and transparent buyer-seller settlements.',
-    badge: 'Zero-Risk Milestone Escrow',
-    icon: '🛡️'
-  },
-  {
-    id: 'possession-handover',
-    title: 'Physical Possession & Demarcation',
-    urduTitle: 'فزیکل پوزیشن و موقع کی نشاندہی',
-    desc: 'On-ground plot demarcation, pillar installation, possession order approval through LDA Directorate Housing-VIII.',
-    badge: 'On-Ground Execution',
-    icon: '📍'
-  },
-  {
-    id: 'material-express',
-    title: 'Doorstep Material Supply Express',
-    urduTitle: 'کنسٹرکشن مٹیریل دہلیز پر ڈیلیوری',
-    desc: 'Direct mill-rate delivery of Grade-60 saria, Bestway/Maple Leaf cement, Awwal bricks, and Margalla crush across Lahore.',
-    badge: 'Direct Mill Wholesale',
-    icon: '🚚'
+    title: 'Token Escrow Desk',
+    icon: ShieldCheck,
+    desc: 'Secure token deposit with milestone-based escrow release. Your funds are protected at every construction stage until final handover.',
+    points: ['Milestone-based release', '100% fund protection', 'Stage verification by CEO', 'Refundable token policy']
   }
-];
+]
 
-export default function ServicesSuite() {
-  const handleServiceInquiry = (service) => {
-    const text = `Assalam-o-Alaikum CEO Taha Mubeen Bhutta,\nI want to book / inquire about your service: "${service.title}". Please provide procedural details and meeting schedule.`;
-    window.open(waLink(CEO_PHONE, text), '_blank');
-  };
-
+function ServicesSuite({ onInquire }) {
   return (
-    <section id="services-suite" className="py-12 px-4 sm:px-6 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 border-b border-cyber/20 pb-5">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-cyber animate-pulse"></span>
-            <span className="text-xs uppercase tracking-widest text-cyber font-mono font-bold">
-              Comprehensive Real Estate & Engineering Suite
-            </span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-platinum font-display">
-            PropTech & Turnkey Services <span className="text-cyber text-lg block sm:inline font-arabic sm:mr-2">بن طاہا پیشہ ورانہ خدمات</span>
-          </h2>
-          <p className="text-xs sm:text-sm text-platinum/70 mt-1 max-w-2xl">
-            Supervised by CEO Taha Mubeen Bhutta. Transparent advisory, PEC-registered civil contracting, official LDA legal documentation, and secure escrow desks.
-          </p>
-        </div>
+    <section id="services" className="px-4 md:px-8 py-10">
+      <p className="hud-label">Module 03 · PropTech Services Suite</p>
+      <h2 className="font-display text-2xl md:text-4xl font-black text-platinum mb-6">
+        PropTech <span className="text-cyber">Services</span> & Real Estate Solutions
+      </h2>
 
-        <div className="flex items-center gap-2">
-          <a
-            href={`tel:${CEO_PHONE}`}
-            className="btn-ghost text-xs px-4 py-2.5 flex items-center gap-2 whitespace-nowrap"
-          >
-            <span>CEO Direct: 0321-9404812</span>
-          </a>
-        </div>
-      </div>
-
-      {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {SERVICES.map((s) => (
-          <div
-            key={s.id}
-            className="glass-strong rounded-2xl cyber-border p-6 flex flex-col justify-between hover:border-cyber/60 transition-all group relative overflow-hidden"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-3xl p-2 rounded-xl bg-obsidian2 border border-cyber/20">{s.icon}</span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyber/10 text-cyber border border-cyber/20">
-                  {s.badge}
-                </span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {SERVICES.map(s => {
+          const Icon = s.icon
+          return (
+            <div key={s.id} className="glass rounded-xl p-5 cyber-border hover-lift transition-all group">
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-11 h-11 rounded-lg bg-cyber/10 border border-cyber/30 flex items-center justify-center cyber-glow">
+                  <Icon size={22} className="text-cyber" />
+                </div>
               </div>
-
-              <h3 className="font-bold text-platinum text-base group-hover:text-cyber transition-colors">
-                {s.title}
-              </h3>
-              <p className="text-xs text-platinum/60 font-arabic mt-1 mb-3">
-                {s.urduTitle}
-              </p>
-              <p className="text-xs text-platinum/75 leading-relaxed mb-6">
-                {s.desc}
-              </p>
+              <h3 className="font-bold text-platinum text-sm group-hover:text-cyber transition-colors">{s.title}</h3>
+              <p className="text-[12px] text-platinum/60 mt-2 leading-relaxed">{s.desc}</p>
+              <ul className="mt-3 space-y-1">
+                {s.points.map(p => (
+                  <li key={p} className="text-[11px] text-platinum/70 flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-cyber" /> {p}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-4 flex gap-2">
+                <button onClick={() => onInquire(s.title)} className="btn-cyber flex-1 text-xs flex items-center justify-center gap-1.5">
+                  <Send size={13} /> Inquire
+                </button>
+                <a
+                  href={waLink(`Assalam-u-alaikum CEO Taha Mubeen Bhutta, I want to book the "${s.title}" service via Bunyad.pk. Please share details.`)}
+                  target="_blank" rel="noreferrer"
+                  className="btn-ghost flex-1 text-xs flex items-center justify-center gap-1.5"
+                >
+                  <MessageCircle size={13} /> Book
+                </a>
+              </div>
             </div>
-
-            <div className="pt-4 border-t border-cyber/15">
-              <button
-                onClick={() => handleServiceInquiry(s)}
-                className="btn-cyber w-full py-2.5 text-xs font-bold flex items-center justify-center gap-2"
-              >
-                <span>Book Service via CEO WhatsApp</span>
-              </button>
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </section>
-  );
+  )
 }
+
+export default memo(ServicesSuite)
